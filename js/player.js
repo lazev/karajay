@@ -62,7 +62,7 @@ class Player {
 			this.pos.x + this.size.x > cameraEdges.right && playerVelocity > 0 ||
 			this.pos.x < cameraEdges.left && playerVelocity < 0) {
 			this.velocity.x = 0;
-			Scenario.moveScenarioX(playerVelocity);
+			Scenario.moveScenarioX(this);
 		}
 	}
 
@@ -70,11 +70,13 @@ class Player {
 	applyGravity() {
 
 		if(this.pos.y + this.size.y > cameraEdges.bottom) {
-			Scenario.moveScenarioY(this.velocity.y);
+			Scenario.moveScenarioY(this);
 		}
+
 		else if(this.pos.y < cameraEdges.top && this.velocity.y < 0) {
-			Scenario.moveScenarioY(this.velocity.y);
+			Scenario.moveScenarioY(this);
 		}
+
 		else {
 			this.pos.y += this.velocity.y;
 		}

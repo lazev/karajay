@@ -75,33 +75,27 @@ const Scenario = {
 	},
 
 
-	moveScenarioX: playerVelocity => {
+	moveScenarioX: player => {
+		let last;
 
-		if(!Collisions.checkScenario(hero)) {
-			let last;
-
-			for(let k in Scenario.pathArray) {
-				Scenario.pathArray[k].pos.x -= playerVelocity;
-				last = Scenario.pathArray[k];
-			}
-
-			Scenario.referenceBlock.pos.x = last.pos.x;
-			Scenario.referenceBlock.pos.y = last.pos.y;
-
-			if(Scenario.referenceBlock.pos.x < canvas.width + 100) {
-				Scenario.createRandomPath();
-			}
-		} else {
-			console.log('ok');
+		for(let k in Scenario.pathArray) {
+			Scenario.pathArray[k].pos.x -= player.velocity.x;
+			last = Scenario.pathArray[k];
 		}
 
+		Scenario.referenceBlock.pos.x = last.pos.x;
+		Scenario.referenceBlock.pos.y = last.pos.y;
+
+		if(Scenario.referenceBlock.pos.x < canvas.width + 100) {
+			Scenario.createRandomPath();
+		}
 	},
 
 
-	moveScenarioY: playerVelocity => {
+	moveScenarioY: player => {
 
 		for(let k in Scenario.pathArray) {
-			Scenario.pathArray[k].pos.y -= playerVelocity;
+			Scenario.pathArray[k].pos.y -= player.velocity.y;
 		}
 	},
 
