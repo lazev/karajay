@@ -60,9 +60,10 @@ class Player {
 		let playerVelocity = this.velocity.x;
 		if(
 			this.pos.x + this.size.x > cameraEdges.right && playerVelocity > 0 ||
-			this.pos.x < cameraEdges.left && playerVelocity < 0) {
-			this.velocity.x = 0;
+			this.pos.x < cameraEdges.left && playerVelocity < 0
+		) {
 			Scenario.moveScenarioX(this);
+			this.velocity.x = 0;
 		}
 	}
 

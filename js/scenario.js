@@ -8,7 +8,8 @@ const Scenario = {
 
 	blocksUntilChangeY: 0,
 
-	defaultBlockWidth: 16,
+	defaultBlockWidth: 6,
+	defaultBlockHeight: 6,
 
 	setInitialBlock: () => {
 		Scenario.referenceBlock = {
@@ -17,8 +18,8 @@ const Scenario = {
 				y: canvas.height - 80
 			},
 			size: {
-				x: 16,
-				y: 16
+				x: 6,
+				y: 6
 			}
 		};
 	},
@@ -41,7 +42,10 @@ const Scenario = {
 
 		let block = {
 			pos:  {x: 0,  y: 0 },
-			size: {x: 16, y: 16}
+			size: {
+				x: Scenario.defaultBlockWidth,
+				y: Scenario.defaultBlockHeight
+			}
 		};
 
 		block.pos.x = Scenario.referenceBlock.pos.x + Scenario.referenceBlock.size.x;
