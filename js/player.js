@@ -47,12 +47,20 @@ class Player {
 			this.runLeft();
 		}
 
-		this.moveCameraX();
-
 		if(Keys.pressed[Keys.map.jump]) {
 			Keys.pressed[Keys.map.jump] = false;
 			this.jump();
 		}
+
+
+		if(Keys.pressed[Keys.map.dash]) {
+			this.dashRight();
+		}
+
+
+
+		this.moveCameraX();
+
 	}
 
 
@@ -130,6 +138,11 @@ class Player {
 
 	runRight() {
 		this.velocity.x = 10;
+	}
+
+
+	dashRight() {
+		this.velocity.x = 30;
 	}
 
 
