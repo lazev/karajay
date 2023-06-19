@@ -9,7 +9,7 @@ const Keys = {
 		down:    's',
 		jump:    ' ',
 		attack1: 'j',
-		dash:    'shift',
+		dash:    'Shift',
 		pause:   'p',
 
 	},
@@ -17,6 +17,7 @@ const Keys = {
 	monitor: () => {
 
 		window.addEventListener('keydown', function(ev){
+			console.log(ev.key);
 			Keys.pressed[ev.key] = true;
 		});
 

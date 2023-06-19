@@ -8,6 +8,8 @@ const scaledCanvas = {
 canvas.width = 1024;
 canvas.height = 576;
 
+Background.init();
+
 const cameraEdges = {
 	right:  canvas.width  /4 * 3,
 	left:   canvas.width  /4,
@@ -17,7 +19,7 @@ const cameraEdges = {
 
 Keys.monitor();
 
-var hero  = new Player;
+var hero = new Player;
 
 /*
 var enemy = new Player;
@@ -29,6 +31,7 @@ Scenario.setInitialBlock();
 Scenario.createRandomPath();
 
 Engine.load([
+	Background,
 	hero,
 	//enemy,
 	Scenario

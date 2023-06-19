@@ -4,6 +4,7 @@ const Engine = {
 	thingsToUpdate: [],
 	gravity: 0.9,
 
+	elapsedFrames: 0,
 
 	load: arr => {
 		Engine.thingsToUpdate = arr;
@@ -23,9 +24,10 @@ const Engine = {
 
 		} else {
 
+			//Engine.looper = setTimeout(Engine.run, 500);
 			window.requestAnimationFrame(Engine.run);
 
-			//Engine.looper = setTimeout(Engine.run, 50);
+			Engine.elapsedFrames++;
 
 			C.clearRect(0, 0, canvas.width, canvas.height);
 

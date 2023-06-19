@@ -34,25 +34,33 @@ const Scenario = {
 			Scenario.pathArray.push(block);
 		} while(block.pos.x < canvas.width+200);
 
-
 	},
 
 
 	createNextBlock: () => {
 
 		let block = {
-			pos:  {x: 0,  y: 0 },
+			pos:  {
+				x: Scenario.referenceBlock.pos.x + Scenario.referenceBlock.size.x,
+				y: Scenario.referenceBlock.pos.y
+			},
 			size: {
 				x: Scenario.defaultBlockWidth,
 				y: Scenario.defaultBlockHeight
 			}
 		};
 
-		block.pos.x = Scenario.referenceBlock.pos.x + Scenario.referenceBlock.size.x;
-		block.pos.y = Scenario.referenceBlock.pos.y;
 
-		Scenario.referenceBlock.pos.x = block.pos.x;
-		Scenario.referenceBlock.pos.y = block.pos.y;
+		Scenario.referenceBlock = {
+			pos: {
+				y: block.pos.y,
+				x: block.pos.x
+			},
+			size: {
+				x: Scenario.defaultBlockWidth,
+				y: Scenario.defaultBlockHeight
+			}
+		};
 
 		if(Scenario.blocksUntilChangeY <= 0) {
 			Scenario.blocksUntilChangeY = 0;
@@ -64,12 +72,18 @@ const Scenario = {
 				block.size.y += Scenario.blockPlatformHeight;
 				Scenario.referenceBlock.pos.y  = block.pos.y;
 				Scenario.referenceBlock.size.y = block.size.y;
-				Scenario.blocksUntilChangeY = 10;
+				Scenario.blocksUntilChangeY = 50;
 			}
+
 			else if(rand >= 96) {
 				block.size.y += Scenario.blockPlatformHeight;
 				Scenario.referenceBlock.pos.y += Scenario.blockPlatformHeight;
-				Scenario.blocksUntilChangeY = 10;
+				Scenario.blocksUntilChangeY = 50;
+			}
+
+			else if(rand >= 90){
+				block.size.x = 260;
+				Scenario.referenceBlock.size.x = 260;
 			}
 		}
 

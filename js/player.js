@@ -3,13 +3,13 @@ class Player {
 		this.color  = 'blue';
 
 		this.size = {
-			x: 100,
-			y: 100
+			x: 0,
+			y: 0
 		};
 
 		this.pos = {
 			x: 400,
-			y: 300
+			y: 200
 		};
 
 		this.velocity = {
@@ -19,12 +19,64 @@ class Player {
 
 		this.maxJumps      = 2;
 		this.jumpCountdown = 0;
+
+		this.dashing = false;
+
+		this.faceTo = 'right';
+
+		this.changeAnimation('stay');
+
+		this.currentFrame  = 0;
+
+		this.sprite = new Adventurer15();
+	}
+
+
+	changeAnimation(animation, faceTo) {
+		if(faceTo) this.faceTo = faceTo;
+		this.animation = animation;
+		//this.currentFrame = 0;
 	}
 
 
 	draw() {
+
+		let frames    = this.sprite.map[this.animation][this.faceTo];
+		let imgToDraw = this.sprite.image[this.faceTo];
+		let scale     = this.sprite.scale;
+		let buffer    = this.sprite.map[this.animation].framesToChange;
+
+		let item = frames[this.currentFrame];
+		if(Engine.elapsedFrames % buffer === 0) {
+			if(this.currentFrame >= frames.length - 1) this.currentFrame = -1;
+			this.currentFrame++;
+		}
+
+		this.size.x = item.hitSize.x * scale;
+		this.size.y = item.hitSize.y * scale;
+
 		C.fillStyle = this.color;
-		C.fillRect(this.pos.x, this.pos.y, this.size.x, this.size.y);
+		C.fillRect(
+			this.pos.x,
+			this.pos.y,
+			this.size.x,
+			this.size.y
+		);
+
+		C.drawImage(
+			imgToDraw,
+
+			item.pos.x+item.hitPos.x,
+			item.pos.y+item.hitPos.y,
+			item.hitSize.x,
+			item.hitSize.y,
+
+			this.pos.x  - item.hitPos.x,
+			this.pos.y  - item.hitPos.y,
+			this.size.x + item.hitPos.x,
+			this.size.y + item.hitPos.y
+		);
+
 	}
 
 
@@ -37,7 +89,7 @@ class Player {
 
 		this.checkCollisionY();
 
-		this.velocity.x = 0;
+		this.stay();
 
 		if(Keys.pressed[Keys.map.right]) {
 			this.runRight();
@@ -52,12 +104,13 @@ class Player {
 			this.jump();
 		}
 
-
 		if(Keys.pressed[Keys.map.dash]) {
-			this.dashRight();
+			if(this.dashing) return;
+			this.dashing = true;
+			this.dash();
+			setTimeout(() => { this.dashing = false; }, 100);
+
 		}
-
-
 
 		this.moveCameraX();
 
@@ -71,6 +124,7 @@ class Player {
 			this.pos.x < cameraEdges.left && playerVelocity < 0
 		) {
 			Scenario.moveScenarioX(this);
+			Background.moveBackgroundX(this);
 			this.velocity.x = 0;
 		}
 	}
@@ -115,9 +169,6 @@ class Player {
 
 		this.velocity.y = 0;
 
-		//const offset =
-		//	this.pos.y - this.position.y + this.hitbox.height
-
 		this.pos.y = Scenario.pathArray[blockId].pos.y - this.size.y - 0.01;
 	}
 
@@ -125,29 +176,41 @@ class Player {
 	touchWall(blockId) {
 
 		if(this.velocity.x > 0) {
-			this.velocity.x = 0;
+			this.stay();
 			this.pos.x = Scenario.pathArray[blockId].pos.x - this.size.x - 0.01;
 		}
 
 		if(this.velocity.x < 0) {
-			this.velocity.x = 0;
+			this.stay();
 			this.pos.x = Scenario.pathArray[blockId].pos.x + Scenario.pathArray[blockId].size.x + 0.01;
 		}
 	}
 
 
+	stay() {
+		this.changeAnimation('stay');
+		this.velocity.x = 0;
+	}
+
+
 	runRight() {
+		this.changeAnimation('run', 'right');
 		this.velocity.x = 10;
 	}
 
 
-	dashRight() {
-		this.velocity.x = 30;
+	runLeft() {
+		this.changeAnimation('run', 'left');
+		this.velocity.x = -10;
 	}
 
 
-	runLeft() {
-		this.velocity.x = -10;
+	dash() {
+		if(this.faceTo == 'right') {
+			this.velocity.x = 20;
+		} else {
+			this.velocity.x = -20;
+		}
 	}
 
 
@@ -161,6 +224,6 @@ class Player {
 
 	jumpReset() {
 		this.jumpCountdown = this.maxJumps;
-	};
+	}
 
 }
