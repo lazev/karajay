@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8" />
+	<title>Karajay</title>
+	<style>
+		body {   background: lightgrey; }
+		canvas {
+			background-color: white;
+			padding: 0;
+			margin: 5px;
+		}
+
+	</style>
+	<script>
+
+		var cnvone, ctxone, image;
+
+		document.addEventListener('DOMContentLoaded', function() {
+			cnvone = document.querySelector('#canvasOne');
+			ctxone = cnvone.getContext('2d');
+		});
+
+
+		function carregarImg() {
+			let imgPath = document.querySelector('#img').value;
+			console.log(imgPath);
+
+			image = new Image();
+			image.src = imgPath;
+
+			image.onload = () => {
+				let width  = image.width;
+				let height = image.height;
+				cnvone.width = width;
+				cnvone.height = height;
+				ctxone.drawImage(image, 0, 0, width, height);
+			};
+		}
+
+		function dividirFrames() {
+
+			let deposit = document.querySelector('#canvasDeposit');
+			deposit.innerHTML = '';
+
+			var framew = document.querySelector('#framew').value;
+			var frameh = document.querySelector('#frameh').value;
+
+			var cols  = Math.ceil(cnvone.width  / framew);
+			var lines = Math.ceil(cnvone.height / frameh);
+
+			let canvas;
+
+			let lineElem;
+
+			let scale = 3;
+
+			for(var l=0; l<=lines; l++) {
+
+				lineElem = document.createElement('div');
+
+				for(var c=0; c<=cols; c++) {
+
+					canvas = document.createElement('canvas');
+					canvas.width  = framew * scale;
+					canvas.height = frameh * scale;
+
+					canvas.addEventListener('mousedown', function(ev){
+						console.log(ev.offsetX, ev.offsetY);
+						posInit = [ ev.offsetX, ev.offsetY ];
+					});
+
+					canvas.addEventListener('mouseup', function(ev){
+						console.log(ev);
+
+						let ctx = ev.target.getContext('2d');
+
+
+						ctx.fillStyle = 'rgba(0, 0, 255, 0.2);';
+						ctx.fillRect(
+							posInit[0],
+							posInit[1],
+							ev.offsetX-posInit[0],
+							ev.offsetY-posInit[1]
+						);
+
+					});
+
+
+					ctx = canvas.getContext('2d');
+					ctx.drawImage(
+						image,
+						c * framew,
+						l * frameh,
+						framew,
+						frameh,
+						0,
+						0,
+						canvas.width,
+						canvas.height
+					);
+
+					lineElem.append(canvas);
+				}
+
+				deposit.append(lineElem);
+			}
+
+
+
+
+		}
+	</script>
+</head>
+<body>
+	<input type="text" id="img" value="sprites/player/adventurer-1.5/mapRight.png">
+	<button onclick="carregarImg()">Carregar</button><br>
+
+	<canvas id="canvasOne"></canvas><br>
+	Cada frame tem:<br>
+	Largura: <input type="tel" size="3" id="framew" value="50">px<br>
+	Altura:  <input type="tel" size="3" id="frameh" value="40">px<br>
+	<button onclick="dividirFrames()">Dividir</button>
+	<div id="canvasDeposit">
+
+
+	</div>
+</body>
+</html>
