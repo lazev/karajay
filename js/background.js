@@ -38,6 +38,13 @@ const Background = {
 			Background.size.x,
 			Background.size.y
 		);
+
+
+		//setTimeout(function(){
+		//	console.log(C.getImageData(100, 100, 1, 1).data);
+		//	debugger;
+		//}, 2000);
+
 	},
 
 

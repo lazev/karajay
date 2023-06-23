@@ -14,7 +14,11 @@
 	</style>
 	<script>
 
-		var cnvone, ctxone, image;
+		var cnvone,
+		    ctxone,
+		    image,
+		    mousein,
+		    results = {};
 
 		document.addEventListener('DOMContentLoaded', function() {
 			cnvone = document.querySelector('#canvasOne');
@@ -22,13 +26,11 @@
 		});
 
 
-		function carregarImg() {
+		function loadImg() {
 			let imgPath = document.querySelector('#img').value;
-			console.log(imgPath);
 
 			image = new Image();
 			image.src = imgPath;
-
 			image.onload = () => {
 				let width  = image.width;
 				let height = image.height;
@@ -38,89 +40,151 @@
 			};
 		}
 
-		function dividirFrames() {
+		function splitFrames() {
 
-			let deposit = document.querySelector('#canvasDeposit');
+			let deposit = document.querySelector('#canvasDeposit'),
+			    framew = document.querySelector('#framew').value,
+			    frameh = document.querySelector('#frameh').value,
+			    cols  = Math.ceil(cnvone.width  / framew),
+			    lines = Math.ceil(cnvone.height / frameh),
+			    canvas,
+			    lineElem,
+			    scale = 1;
+
 			deposit.innerHTML = '';
 
-			var framew = document.querySelector('#framew').value;
-			var frameh = document.querySelector('#frameh').value;
-
-			var cols  = Math.ceil(cnvone.width  / framew);
-			var lines = Math.ceil(cnvone.height / frameh);
-
-			let canvas;
-
-			let lineElem;
-
-			let scale = 3;
-
-			for(var l=0; l<=lines; l++) {
+			for(var line=0; line<=lines; line++) {
 
 				lineElem = document.createElement('div');
 
-				for(var c=0; c<=cols; c++) {
+				for(var col=0; col<=cols; col++) {
 
 					canvas = document.createElement('canvas');
 					canvas.width  = framew * scale;
 					canvas.height = frameh * scale;
+					canvas.style.backgroundImage = 'url(\''+ document.querySelector('#img').value +'\')';
+					canvas.style.backgroundRepeat = 'no-repeat';
+					canvas.style.backgroundPosition = '-'+ col * framew +'px -'+ line * frameh +'px';
 
 					canvas.addEventListener('mousedown', function(ev){
-						console.log(ev.offsetX, ev.offsetY);
-						posInit = [ ev.offsetX, ev.offsetY ];
+						clearHitArea(line, col, ev)
 					});
 
 					canvas.addEventListener('mouseup', function(ev){
-						console.log(ev);
-
-						let ctx = ev.target.getContext('2d');
-
-
-						ctx.fillStyle = 'rgba(0, 0, 255, 0.2);';
-						ctx.fillRect(
-							posInit[0],
-							posInit[1],
-							ev.offsetX-posInit[0],
-							ev.offsetY-posInit[1]
-						);
-
+						drawHitArea(line, col, ev);
 					});
 
+					//ctx = canvas.getContext('2d');
+					//ctx.drawImage(
+					//	image,
+					//	col  * framew,
+					//	line * frameh,
+					//	framew,
+					//	frameh,
+					//	0,
+					//	0,
+					//	canvas.width,
+					//	canvas.height
+					//);
 
-					ctx = canvas.getContext('2d');
-					ctx.drawImage(
-						image,
-						c * framew,
-						l * frameh,
-						framew,
-						frameh,
-						0,
-						0,
-						canvas.width,
-						canvas.height
-					);
+					setMatrix({
+						l: line,
+						c: col,
+						x: col * framew,
+						y: line * frameh,
+						w: framew,
+						h: frameh
+					});
 
 					lineElem.append(canvas);
 				}
 
 				deposit.append(lineElem);
 			}
+		}
+
+		function clearHitArea(line, col, ev) {
+
+			mousein = [ ev.offsetX, ev.offsetY ];
+
+			if(typeof results == 'undefined') return;
+			if(typeof results[line] == 'undefined') return;
+			if(typeof results[line][col] == 'undefined') return;
+
+			if(results[line][col].hitSize.x > 0) {
+				let ctx = ev.target.getContext('2d');
+				ctx.clearRect(
+					results[line][col].hitPos.x,
+					results[line][col].hitPos.y,
+					results[line][col].hitSize.x,
+					results[line][col].hitSize.y
+				);
+
+				//setMatrix({
+				//	l: line,
+				//	c: col,
+				//	hitx: 0,
+				//	hity: 0,
+				//	hitw: 0,
+				//	hith: 0
+				//});
+			}
+
+		}
+
+		function drawHitArea(line, col, ev) {
+			let ctx = ev.target.getContext('2d');
+
+			ctx.fillStyle = 'rgba(0, 0, 255, 0.4)';
+			ctx.fillRect(
+				mousein[0],
+				mousein[1],
+				ev.offsetX-mousein[0],
+				ev.offsetY-mousein[1]
+			);
+
+			setMatrix({
+				l: line,
+				c: col,
+				hitx: mousein[0],
+				hity: mousein[1],
+				hitw: ev.offsetX-mousein[0],
+				hith: ev.offsetY-mousein[1]
+			});
+		}
 
 
+		function setMatrix({l, c, x, y, w, h, hitx, hity, hitw, hith}) {
 
+			if(typeof results == 'undefined')    results    = {};
+			if(typeof results[l] == 'undefined') results[l] = {};
+			if(typeof results[l][c] == 'undefined') {
+				results[l][c] = {
+					pos:    { x: 0, y: 0 }, size:    { x: 0, y: 0 },
+					hitPos: { x: 0, y: 0 }, hitSize: { x: 0, y: 0 }
+				};
+			}
 
+			if(x    != undefined) results[l][c].pos.x     = x;
+			if(y    != undefined) results[l][c].pos.y     = y;
+			if(w    != undefined) results[l][c].size.x    = w;
+			if(h    != undefined) results[l][c].size.y    = h;
+			if(hitx != undefined) results[l][c].hitPos.x  = hitx;
+			if(hity != undefined) results[l][c].hitPos.y  = hity;
+			if(hitw != undefined) results[l][c].hitSize.x = hitw;
+			if(hith != undefined) results[l][c].hitSize.y = hith;
 		}
 	</script>
 </head>
 <body>
 	<input type="text" id="img" value="sprites/player/adventurer-1.5/mapRight.png">
-	<button onclick="carregarImg()">Carregar</button><br>
+	<button onclick="loadImg()">Carregar</button><br>
 
 	<canvas id="canvasOne"></canvas><br>
 	Cada frame tem:<br>
 	Largura: <input type="tel" size="3" id="framew" value="50">px<br>
 	Altura:  <input type="tel" size="3" id="frameh" value="40">px<br>
-	<button onclick="dividirFrames()">Dividir</button>
+	<button onclick="splitFrames()">Dividir</button>
 	<div id="canvasDeposit">
 
 
