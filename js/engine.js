@@ -24,7 +24,7 @@ const Engine = {
 
 		} else {
 
-			//Engine.looper = setTimeout(Engine.run, 500);
+			//Engine.looper = setTimeout(Engine.run, 50);
 			window.requestAnimationFrame(Engine.run);
 
 			Engine.elapsedFrames++;

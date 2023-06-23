@@ -15,11 +15,9 @@ const Scenario = {
 		Scenario.referenceBlock = {
 			pos: {
 				x: -216,
-				y: canvas.height - 80
-			},
-			size: {
-				x: 6,
-				y: 6
+				y: canvas.height - 80,
+				w: 6,
+				h: 6
 			}
 		};
 	},
@@ -41,12 +39,10 @@ const Scenario = {
 
 		let block = {
 			pos:  {
-				x: Scenario.referenceBlock.pos.x + Scenario.referenceBlock.size.x,
-				y: Scenario.referenceBlock.pos.y
-			},
-			size: {
-				x: Scenario.defaultBlockWidth,
-				y: Scenario.defaultBlockHeight
+				x: Scenario.referenceBlock.pos.x + Scenario.referenceBlock.pos.w,
+				y: Scenario.referenceBlock.pos.y,
+				w: Scenario.defaultBlockWidth,
+				h: Scenario.defaultBlockHeight
 			}
 		};
 
@@ -54,11 +50,9 @@ const Scenario = {
 		Scenario.referenceBlock = {
 			pos: {
 				y: block.pos.y,
-				x: block.pos.x
-			},
-			size: {
-				x: Scenario.defaultBlockWidth,
-				y: Scenario.defaultBlockHeight
+				x: block.pos.x,
+				w: Scenario.defaultBlockWidth,
+				h: Scenario.defaultBlockHeight
 			}
 		};
 
@@ -68,22 +62,22 @@ const Scenario = {
 			let rand = Math.random()*100;
 
 			if(rand >= 98) {
-				block.pos.y  -= Scenario.blockPlatformHeight;
-				block.size.y += Scenario.blockPlatformHeight;
-				Scenario.referenceBlock.pos.y  = block.pos.y;
-				Scenario.referenceBlock.size.y = block.size.y;
+				block.pos.y -= Scenario.blockPlatformHeight;
+				block.pos.h += Scenario.blockPlatformHeight;
+				Scenario.referenceBlock.pos.y = block.pos.y;
+				Scenario.referenceBlock.pos.h = block.pos.h;
 				Scenario.blocksUntilChangeY = 50;
 			}
 
 			else if(rand >= 96) {
-				block.size.y += Scenario.blockPlatformHeight;
+				block.pos.h += Scenario.blockPlatformHeight;
 				Scenario.referenceBlock.pos.y += Scenario.blockPlatformHeight;
 				Scenario.blocksUntilChangeY = 50;
 			}
 
 			else if(rand >= 90){
-				block.size.x = 260;
-				Scenario.referenceBlock.size.x = 260;
+				block.pos.w = 260;
+				Scenario.referenceBlock.pos.w = 260;
 			}
 		}
 
@@ -122,8 +116,7 @@ const Scenario = {
 
 		Scenario.pathArray.forEach(function(item){
 			let block = new Blocks({
-				pos:  item.pos,
-				size: item.size
+				pos: item.pos
 			});
 
 			block.draw();

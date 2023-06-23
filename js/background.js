@@ -6,22 +6,16 @@ const Background = {
 
 	pos: {
 		x: 0,
-		y: -200
+		y: -200,
+		w: 0,
+		h: 0
 	},
-
-	size: {
-		x: 0,
-		y: 0
-	},
-
 
 	init: () => {
 		Background.bgImage.src = Background.imageSource;
 
-		Background.size = {
-			x: canvas.width*4,
-			y: canvas.height*2
-		};
+		Background.pos.w = canvas.width*4;
+		Background.pos.h = canvas.height*2;
 	},
 
 
@@ -35,8 +29,8 @@ const Background = {
 			720,
 			Background.pos.x,
 			Background.pos.y,
-			Background.size.x,
-			Background.size.y
+			Background.pos.w,
+			Background.pos.h
 		);
 
 

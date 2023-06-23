@@ -5,18 +5,19 @@ class Player {
 
 		this.color  = 'blue';
 
-		this.size = {
-			x: 0,
-			y: 0
-		};
-
 		this.pos = {
 			x: 0,
-			y: 0
+			y: 0,
+			w: 0,
+			h: 0
 		};
 
-		this.hitPos  = { x: 0, y: 0 };
-		this.hitSize = { x: 0, y: 0 };
+		this.hit = {
+			x: 0,
+			y: 0,
+			w: 0,
+			h: 0
+		};
 
 		this.velocity = {
 			x: 0,
@@ -29,47 +30,48 @@ class Player {
 		this.dashing = false;
 
 		this.faceTo = 'right';
+		this.currentAnimation = 'stay';
 
-		this.changeAnimation('stay');
-
-		this.currentFrame  = 0;
+		this.currentFrame = 0;
 
 		this.scale = this.sprite.scale;
 	}
 
 
 	get leftEdge() {
-		return this.pos.x + this.hitPos.x * this.scale;
+		return this.pos.x + this.hit.x * this.scale;
 	}
 
 	get rightEdge() {
-		return (this.hitPos.x + this.hitSize.x) * this.scale;
+		return (this.hit.x + this.hit.w) * this.scale;
 	}
 
 	get topEdge() {
-		return this.pos.y + this.hitPos.y * this.scale;
+		return this.pos.y + this.hit.y * this.scale;
 	}
 
 	get bottomEdge() {
-		return (this.hitPos.y + this.hitSize.y) * this.scale;
+		return (this.hit.y + this.hit.h) * this.scale;
 	}
 
 
 	changeAnimation(animation, faceTo) {
+		if(this.currentAnimation != animation || (typeof faceTo != 'undefined' && this.faceTo != faceTo)) {
+			console.log(this.currentAnimation +' - '+ animation);
+			console.log(this.faceTo +' - '+ faceTo);
+			this.currentFrame = 0;
+		}
+
 		if(faceTo) this.faceTo = faceTo;
-		this.animation = animation;
+		this.currentAnimation = animation;
 	}
 
 
 	draw() {
 
-		let frames    = this.sprite.map[this.animation][this.faceTo];
+		let frames    = this.sprite.map[this.currentAnimation][this.faceTo];
 		let imgToDraw = this.sprite.image[this.faceTo];
-		let buffer    = this.sprite.map[this.animation].framesToChange;
-		let item      = frames[this.currentFrame];
-
-		this.hitPos  = item.hitPos;
-		this.hitSize = item.hitSize;
+		let buffer    = this.sprite.map[this.currentAnimation].framesToChange;
 
 		if(Engine.elapsedFrames % buffer === 0) {
 			this.currentFrame++;
@@ -77,10 +79,12 @@ class Player {
 			if(this.currentFrame >= frames.length-1) this.currentFrame = 0;
 		}
 
-		this.size = {
-			x: item.hitSize.x * this.scale,
-			y: item.hitSize.y * this.scale
-		};
+		let item = frames[this.currentFrame];
+
+		this.hit = item.hit;
+
+		this.pos.w = item.hit.w * this.scale;
+		this.pos.h = item.hit.h * this.scale;
 
 		C.fillStyle = this.color;
 		C.fillRect(
@@ -94,8 +98,8 @@ class Player {
 		C.fillRect(
 			this.pos.x,
 			this.pos.y,
-			item.size.x * this.scale,
-			item.size.y * this.scale
+			item.pos.w * this.scale,
+			item.pos.h * this.scale
 		);
 
 		C.drawImage(
@@ -103,13 +107,13 @@ class Player {
 
 			item.pos.x,
 			item.pos.y,
-			item.size.x,
-			item.size.y,
+			item.pos.w,
+			item.pos.h,
 
 			this.pos.x,
 			this.pos.y,
-			item.size.x * this.scale,
-			item.size.y * this.scale,
+			item.pos.w * this.scale,
+			item.pos.h * this.scale,
 		);
 	}
 
@@ -118,27 +122,33 @@ class Player {
 		this.draw();
 
 		this.pos.x += this.velocity.x;
+
 		this.checkCollisionX();
+
 		this.applyGravity();
 
 		this.checkCollisionY();
 
-		this.stay();
+		this.withOutAnimation = true;
 
 		if(Keys.pressed[Keys.map.right]) {
+			this.withOutAnimation = false;
 			this.runRight();
 		}
 
 		else if(Keys.pressed[Keys.map.left]) {
+			this.withOutAnimation = false;
 			this.runLeft();
 		}
 
 		if(Keys.pressed[Keys.map.jump]) {
 			Keys.pressed[Keys.map.jump] = false;
+			this.withOutAnimation = false;
 			this.jump();
 		}
 
 		if(Keys.pressed[Keys.map.dash]) {
+			this.withOutAnimation = false;
 			if(this.dashing) return;
 			this.dashing = true;
 			this.dash();
@@ -146,8 +156,11 @@ class Player {
 		}
 
 		if(this.velocity.y > 0.9) { //???
+			this.withOutAnimation = false;
 			this.falling();
 		}
+
+		if(this.withOutAnimation) this.changeAnimation('stay');
 
 		this.moveCameraX();
 	}
@@ -156,7 +169,7 @@ class Player {
 	moveCameraX() {
 		let playerVelocity = this.velocity.x;
 		if(
-			this.pos.x + this.size.x > cameraEdges.right && playerVelocity > 0 ||
+			this.pos.x + this.pos.w > cameraEdges.right && playerVelocity > 0 ||
 			this.pos.x < cameraEdges.left && playerVelocity < 0
 		) {
 			Scenario.moveScenarioX(this);
@@ -168,7 +181,7 @@ class Player {
 
 	applyGravity() {
 
-		if(this.pos.y + this.size.y > cameraEdges.bottom) {
+		if(this.pos.y + this.pos.h > cameraEdges.bottom) {
 			Scenario.moveScenarioY(this);
 		}
 
@@ -205,7 +218,7 @@ class Player {
 
 		this.velocity.y = 0;
 
-		this.pos.y = Scenario.pathArray[blockId].pos.y - this.size.y - 0.01;
+		this.pos.y = Scenario.pathArray[blockId].pos.y - this.pos.h - 0.01;
 	}
 
 
@@ -213,12 +226,12 @@ class Player {
 
 		if(this.velocity.x > 0) {
 			this.stay();
-			this.pos.x = Scenario.pathArray[blockId].pos.x - this.size.x - 0.01;
+			this.pos.x = Scenario.pathArray[blockId].pos.x - this.pos.w - 0.01;
 		}
 
 		if(this.velocity.x < 0) {
 			this.stay();
-			this.pos.x = Scenario.pathArray[blockId].pos.x + Scenario.pathArray[blockId].size.x + 0.01;
+			this.pos.x = Scenario.pathArray[blockId].pos.x + Scenario.pathArray[blockId].pos.w + 0.01;
 		}
 	}
 

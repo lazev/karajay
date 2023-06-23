@@ -65,13 +65,16 @@
 					canvas.style.backgroundImage = 'url(\''+ document.querySelector('#img').value +'\')';
 					canvas.style.backgroundRepeat = 'no-repeat';
 					canvas.style.backgroundPosition = '-'+ col * framew +'px -'+ line * frameh +'px';
+					canvas.style.cursor = 'crosshair';
+					canvas.setAttribute('line', line);
+					canvas.setAttribute('col', col);
 
 					canvas.addEventListener('mousedown', function(ev){
-						clearHitArea(line, col, ev)
+						clearHitArea(ev)
 					});
 
 					canvas.addEventListener('mouseup', function(ev){
-						drawHitArea(line, col, ev);
+						drawHitArea(ev);
 					});
 
 					//ctx = canvas.getContext('2d');
@@ -103,7 +106,10 @@
 			}
 		}
 
-		function clearHitArea(line, col, ev) {
+
+		function clearHitArea(ev) {
+			let col  = ev.target.getAttribute('col');
+			let line = ev.target.getAttribute('line');
 
 			mousein = [ ev.offsetX, ev.offsetY ];
 
@@ -119,60 +125,74 @@
 					results[line][col].hitSize.x,
 					results[line][col].hitSize.y
 				);
-
-				//setMatrix({
-				//	l: line,
-				//	c: col,
-				//	hitx: 0,
-				//	hity: 0,
-				//	hitw: 0,
-				//	hith: 0
-				//});
 			}
-
 		}
 
-		function drawHitArea(line, col, ev) {
+
+		function drawHitArea(ev) {
+
+			let col  = ev.target.getAttribute('col');
+			let line = ev.target.getAttribute('line');
+
 			let ctx = ev.target.getContext('2d');
 
+			let x = mousein[0];
+			let y = mousein[1];
+			let w = ev.offsetX-mousein[0];
+			let h = ev.offsetY-mousein[1];
+
+			if(h < 0) {
+				y = y + h;
+				h = Math.abs(h);
+			}
+
+			if(w < 0) {
+				x = x + w;
+				w = Math.abs(w);
+			}
+
 			ctx.fillStyle = 'rgba(0, 0, 255, 0.4)';
-			ctx.fillRect(
-				mousein[0],
-				mousein[1],
-				ev.offsetX-mousein[0],
-				ev.offsetY-mousein[1]
-			);
+			ctx.fillRect(x, y, w, h);
+
+			console.log({
+				l: line,
+				c: col,
+				hitx: x,
+				hity: y,
+				hitw: w,
+				hith: h
+			});
 
 			setMatrix({
 				l: line,
 				c: col,
-				hitx: mousein[0],
-				hity: mousein[1],
-				hitw: ev.offsetX-mousein[0],
-				hith: ev.offsetY-mousein[1]
+				hitx: x,
+				hity: y,
+				hitw: w,
+				hith: h
 			});
 		}
 
 
 		function setMatrix({l, c, x, y, w, h, hitx, hity, hitw, hith}) {
 
-			if(typeof results == 'undefined')    results    = {};
-			if(typeof results[l] == 'undefined') results[l] = {};
+			if(typeof results       == 'undefined') results    = {};
+			if(typeof results[l]    == 'undefined') results[l] = {};
 			if(typeof results[l][c] == 'undefined') {
 				results[l][c] = {
-					pos:    { x: 0, y: 0 }, size:    { x: 0, y: 0 },
-					hitPos: { x: 0, y: 0 }, hitSize: { x: 0, y: 0 }
+					pos: { x: 0, y: 0, w: 0, h: 0 },
+					hit: { x: 0, y: 0, w: 0, h: 0 }
 				};
 			}
 
-			if(x    != undefined) results[l][c].pos.x     = x;
-			if(y    != undefined) results[l][c].pos.y     = y;
-			if(w    != undefined) results[l][c].size.x    = w;
-			if(h    != undefined) results[l][c].size.y    = h;
-			if(hitx != undefined) results[l][c].hitPos.x  = hitx;
-			if(hity != undefined) results[l][c].hitPos.y  = hity;
-			if(hitw != undefined) results[l][c].hitSize.x = hitw;
-			if(hith != undefined) results[l][c].hitSize.y = hith;
+			if(x    != undefined) results[l][c].pos.x = x;
+			if(y    != undefined) results[l][c].pos.y = y;
+			if(w    != undefined) results[l][c].pos.w = w;
+			if(h    != undefined) results[l][c].pos.h = h;
+			if(hitx != undefined) results[l][c].hit.x = hitx;
+			if(hity != undefined) results[l][c].hit.y = hity;
+			if(hitw != undefined) results[l][c].hit.w = hitw;
+			if(hith != undefined) results[l][c].hit.h = hith;
 		}
 	</script>
 </head>
