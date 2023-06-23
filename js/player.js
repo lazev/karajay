@@ -1,5 +1,8 @@
 class Player {
 	constructor() {
+
+		this.sprite = new Adventurer15();
+
 		this.color  = 'blue';
 
 		this.size = {
@@ -8,9 +11,12 @@ class Player {
 		};
 
 		this.pos = {
-			x: 400,
-			y: 200
+			x: 0,
+			y: 0
 		};
+
+		this.hitPos  = { x: 0, y: 0 };
+		this.hitSize = { x: 0, y: 0 };
 
 		this.velocity = {
 			x: 0,
@@ -28,14 +34,30 @@ class Player {
 
 		this.currentFrame  = 0;
 
-		this.sprite = new Adventurer15();
+		this.scale = this.sprite.scale;
+	}
+
+
+	get leftEdge() {
+		return this.pos.x + this.hitPos.x * this.scale;
+	}
+
+	get rightEdge() {
+		return (this.hitPos.x + this.hitSize.x) * this.scale;
+	}
+
+	get topEdge() {
+		return this.pos.y + this.hitPos.y * this.scale;
+	}
+
+	get bottomEdge() {
+		return (this.hitPos.y + this.hitSize.y) * this.scale;
 	}
 
 
 	changeAnimation(animation, faceTo) {
 		if(faceTo) this.faceTo = faceTo;
 		this.animation = animation;
-		//this.currentFrame = 0;
 	}
 
 
@@ -43,40 +65,52 @@ class Player {
 
 		let frames    = this.sprite.map[this.animation][this.faceTo];
 		let imgToDraw = this.sprite.image[this.faceTo];
-		let scale     = this.sprite.scale;
 		let buffer    = this.sprite.map[this.animation].framesToChange;
+		let item      = frames[this.currentFrame];
 
-		let item = frames[this.currentFrame];
+		this.hitPos  = item.hitPos;
+		this.hitSize = item.hitSize;
+
 		if(Engine.elapsedFrames % buffer === 0) {
-			if(this.currentFrame >= frames.length - 1) this.currentFrame = -1;
 			this.currentFrame++;
+			console.log(this.currentFrame, frames.length-1);
+			if(this.currentFrame >= frames.length-1) this.currentFrame = 0;
 		}
 
-		this.size.x = item.hitSize.x * scale;
-		this.size.y = item.hitSize.y * scale;
+		this.size = {
+			x: item.hitSize.x * this.scale,
+			y: item.hitSize.y * this.scale
+		};
 
 		C.fillStyle = this.color;
 		C.fillRect(
+			this.leftEdge,
+			this.topEdge,
+			this.rightEdge,
+			this.bottomEdge
+		);
+
+		C.fillStyle = 'rgba(0, 255, 0, 0.2)';
+		C.fillRect(
 			this.pos.x,
 			this.pos.y,
-			this.size.x,
-			this.size.y
+			item.size.x * this.scale,
+			item.size.y * this.scale
 		);
 
 		C.drawImage(
 			imgToDraw,
 
-			item.pos.x+item.hitPos.x,
-			item.pos.y+item.hitPos.y,
-			item.hitSize.x,
-			item.hitSize.y,
+			item.pos.x,
+			item.pos.y,
+			item.size.x,
+			item.size.y,
 
-			this.pos.x  - item.hitPos.x,
-			this.pos.y  - item.hitPos.y,
-			this.size.x + item.hitPos.x,
-			this.size.y + item.hitPos.y
+			this.pos.x,
+			this.pos.y,
+			item.size.x * this.scale,
+			item.size.y * this.scale,
 		);
-
 	}
 
 
@@ -109,11 +143,13 @@ class Player {
 			this.dashing = true;
 			this.dash();
 			setTimeout(() => { this.dashing = false; }, 100);
+		}
 
+		if(this.velocity.y > 0.9) { //???
+			this.falling();
 		}
 
 		this.moveCameraX();
-
 	}
 
 
@@ -224,6 +260,11 @@ class Player {
 
 	jumpReset() {
 		this.jumpCountdown = this.maxJumps;
+	}
+
+
+	falling() {
+		this.changeAnimation('falling', this.faceTo);
 	}
 
 }
