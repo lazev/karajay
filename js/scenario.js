@@ -106,8 +106,11 @@ const Scenario = {
 
 	moveScenarioY: player => {
 
+		let vel = (player.velocity.y < 0) ? -10 : 10;
+
 		for(let k in Scenario.pathArray) {
-			Scenario.pathArray[k].pos.y -= player.velocity.y;
+         
+			Scenario.pathArray[k].pos.y -= vel;
 		}
 	},
 

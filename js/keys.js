@@ -17,7 +17,7 @@ const Keys = {
 	monitor: () => {
 
 		window.addEventListener('keydown', function(ev){
-			console.log(ev.key);
+			//console.log(ev.key);
 			Keys.pressed[ev.key] = true;
 		});
 

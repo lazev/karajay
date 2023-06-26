@@ -71,6 +71,7 @@
 					canvas.style.cursor = 'crosshair';
 					canvas.setAttribute('line', line);
 					canvas.setAttribute('col', col);
+               canvas.setAttribute('title', col * framew +' x '+ line * frameh);
 
 					canvas.addEventListener('mousedown', function(ev){
 						clearHitArea(ev)

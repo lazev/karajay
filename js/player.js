@@ -7,7 +7,7 @@ class Player {
 
 		this.pos = {
 			x: 0,
-			y: 0,
+			y: 200,
 			w: 0,
 			h: 0
 		};
@@ -93,7 +93,7 @@ class Player {
 			this.pos.h
 		);
 
-		C.fillStyle = 'rgba(0, 255, 0, 0.2)';
+		C.fillStyle = 'rgba(255, 0, 0, 0.2)';
 		C.fillRect(
 			this.pos.x - item.hit.x * this.scale,
 			this.pos.y - item.hit.y * this.scale,
@@ -146,6 +146,12 @@ class Player {
 			this.jump();
 		}
 
+      else if(Keys.pressed[Keys.map.down]) {
+         this.pos.y += 11;
+			this.withOutAnimation = false;
+			this.crouch();
+		}
+
 		if(Keys.pressed[Keys.map.dash]) {
 			this.withOutAnimation = false;
 			if(this.dashing) return;
@@ -157,6 +163,10 @@ class Player {
 		if(this.velocity.y > 0.9) { //???
 			this.withOutAnimation = false;
 			this.falling();
+		}
+      else if(this.velocity.y < 0) {
+			this.withOutAnimation = false;
+			this.jumping();
 		}
 
 		if(this.withOutAnimation) this.stay();
@@ -240,6 +250,10 @@ class Player {
 		this.velocity.x = 0;
 	}
 
+   crouch() {
+      this.changeAnimation('crouch');
+      this.velocity.x = 0;
+   }
 
 	runRight() {
 		this.changeAnimation('run', 'right');
@@ -275,8 +289,13 @@ class Player {
 	}
 
 
+   jumping() {
+      this.changeAnimation('jump', this.faceTo);
+   }
+
+
 	falling() {
-		this.changeAnimation('falling', this.faceTo);
+		this.changeAnimation('fall', this.faceTo);
 	}
 
 }
