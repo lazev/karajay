@@ -75,8 +75,7 @@ class Player {
 
 		if(Engine.elapsedFrames % buffer === 0) {
 			this.currentFrame++;
-			console.log(this.currentFrame, frames.length-1);
-			if(this.currentFrame >= frames.length-1) this.currentFrame = 0;
+			if(this.currentFrame >= frames.length) this.currentFrame = 0;
 		}
 
 		let item = frames[this.currentFrame];
@@ -88,16 +87,16 @@ class Player {
 
 		C.fillStyle = this.color;
 		C.fillRect(
-			this.leftEdge,
-			this.topEdge,
-			this.rightEdge,
-			this.bottomEdge
+			this.pos.x,
+			this.pos.y,
+			this.pos.w,
+			this.pos.h
 		);
 
 		C.fillStyle = 'rgba(0, 255, 0, 0.2)';
 		C.fillRect(
-			this.pos.x,
-			this.pos.y,
+			this.pos.x - item.hit.x * this.scale,
+			this.pos.y - item.hit.y * this.scale,
 			item.pos.w * this.scale,
 			item.pos.h * this.scale
 		);
@@ -110,8 +109,8 @@ class Player {
 			item.pos.w,
 			item.pos.h,
 
-			this.pos.x,
-			this.pos.y,
+			this.pos.x - item.hit.x * this.scale,
+			this.pos.y - item.hit.y * this.scale,
 			item.pos.w * this.scale,
 			item.pos.h * this.scale,
 		);
@@ -160,7 +159,7 @@ class Player {
 			this.falling();
 		}
 
-		if(this.withOutAnimation) this.changeAnimation('stay');
+		if(this.withOutAnimation) this.stay();
 
 		this.moveCameraX();
 	}

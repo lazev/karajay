@@ -49,7 +49,9 @@
 			    lines = Math.ceil(cnvone.height / frameh),
 			    canvas,
 			    lineElem,
-			    scale = 1;
+			    scale = document.querySelector('#scale').value;
+
+			if(!scale) scale = 1;
 
 			deposit.innerHTML = '';
 
@@ -62,9 +64,10 @@
 					canvas = document.createElement('canvas');
 					canvas.width  = framew * scale;
 					canvas.height = frameh * scale;
-					canvas.style.backgroundImage = 'url(\''+ document.querySelector('#img').value +'\')';
-					canvas.style.backgroundRepeat = 'no-repeat';
-					canvas.style.backgroundPosition = '-'+ col * framew +'px -'+ line * frameh +'px';
+					canvas.style.backgroundImage    = 'url(\''+ document.querySelector('#img').value +'\')';
+					canvas.style.backgroundRepeat   = 'no-repeat';
+					canvas.style.backgroundPosition = '-'+ col * framew * scale +'px -'+ line * frameh * scale +'px';
+					canvas.style.backgroundSize     = cnvone.width * scale +'px '+ cnvone.height * scale +'px';
 					canvas.style.cursor = 'crosshair';
 					canvas.setAttribute('line', line);
 					canvas.setAttribute('col', col);
@@ -117,13 +120,13 @@
 			if(typeof results[line] == 'undefined') return;
 			if(typeof results[line][col] == 'undefined') return;
 
-			if(results[line][col].hitSize.x > 0) {
+			if(results[line][col].hit.w > 0) {
 				let ctx = ev.target.getContext('2d');
 				ctx.clearRect(
-					results[line][col].hitPos.x,
-					results[line][col].hitPos.y,
-					results[line][col].hitSize.x,
-					results[line][col].hitSize.y
+					results[line][col].hit.x,
+					results[line][col].hit.y,
+					results[line][col].hit.w,
+					results[line][col].hit.h
 				);
 			}
 		}
@@ -136,10 +139,12 @@
 
 			let ctx = ev.target.getContext('2d');
 
-			let x = mousein[0];
-			let y = mousein[1];
-			let w = ev.offsetX-mousein[0];
-			let h = ev.offsetY-mousein[1];
+			let scale = document.querySelector('#scale').value;
+
+			let x = mousein[0] / scale;
+			let y = mousein[1] / scale;
+			let w = ev.offsetX-mousein[0] / scale;
+			let h = ev.offsetY-mousein[1] / scale;
 
 			if(h < 0) {
 				y = y + h;
@@ -203,7 +208,8 @@
 	<canvas id="canvasOne"></canvas><br>
 	Cada frame tem:<br>
 	Largura: <input type="tel" size="3" id="framew" value="50">px<br>
-	Altura:  <input type="tel" size="3" id="frameh" value="40">px<br>
+	Altura:  <input type="tel" size="3" id="frameh" value="37">px<br>
+	Escala:  <input type="tel" size="3" id="scale" value="2">x<br>
 	<button onclick="splitFrames()">Dividir</button>
 	<div id="canvasDeposit">
 
