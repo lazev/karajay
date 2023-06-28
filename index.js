@@ -1,14 +1,12 @@
 const canvas = document.querySelector('canvas');
+canvas.width = 1024;
+canvas.height = 576;
+
 const C = canvas.getContext('2d');
 const scaledCanvas = {
 	width:  canvas.width  / 4,
 	height: canvas.height / 4
 }
-
-canvas.width = 1024;
-canvas.height = 576;
-
-Background.init();
 
 const cameraEdges = {
 	right:  canvas.width  /4 * 3,
@@ -17,15 +15,12 @@ const cameraEdges = {
 	bottom: canvas.height /4 * 3
 }
 
+Background.init();
+Sounds.init();
+
 Keys.monitor();
 
 var hero = new Player;
-
-/*
-var enemy = new Player;
-enemy.color = 'red';
-enemy.pos.x = 300;
-*/
 
 Scenario.setInitialBlock();
 Scenario.createRandomPath();

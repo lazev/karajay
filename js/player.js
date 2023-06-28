@@ -57,8 +57,6 @@ class Player {
 
 	changeAnimation(animation, faceTo) {
 		if(this.currentAnimation != animation || (typeof faceTo != 'undefined' && this.faceTo != faceTo)) {
-			console.log(this.currentAnimation +' - '+ animation);
-			console.log(this.faceTo +' - '+ faceTo);
 			this.currentFrame = 0;
 		}
 
@@ -146,12 +144,6 @@ class Player {
 			this.jump();
 		}
 
-      else if(Keys.pressed[Keys.map.down]) {
-         this.pos.y += 11;
-			this.withOutAnimation = false;
-			this.crouch();
-		}
-
 		if(Keys.pressed[Keys.map.dash]) {
 			this.withOutAnimation = false;
 			if(this.dashing) return;
@@ -160,7 +152,13 @@ class Player {
 			setTimeout(() => { this.dashing = false; }, 100);
 		}
 
-		if(this.velocity.y > 0.9) { //???
+
+		if(Keys.pressed[Keys.map.down]) {
+         this.pos.y += 11;
+			this.withOutAnimation = false;
+			this.crouch();
+		}
+		else if(this.velocity.y > 0.9) { //???
 			this.withOutAnimation = false;
 			this.falling();
 		}
@@ -177,12 +175,24 @@ class Player {
 
 	moveCameraX() {
 		let playerVelocity = this.velocity.x;
-		if(
-			this.pos.x + this.pos.w > cameraEdges.right && playerVelocity > 0 ||
-			this.pos.x < cameraEdges.left && playerVelocity < 0
-		) {
+
+		if(this.pos.x + this.pos.w > cameraEdges.right && playerVelocity >= 0) {
+
+			let distance = this.pos.x + this.pos.w - cameraEdges.right;
+
 			Scenario.moveScenarioX(this);
 			Background.moveBackgroundX(this);
+			//this.pos.x -= distance-6;
+			this.velocity.x = 0;
+
+		}
+		else if(this.pos.x < cameraEdges.left && playerVelocity <= 0) {
+
+			let distance = cameraEdges.left - this.pos.x;
+
+			Scenario.moveScenarioX(this);
+			Background.moveBackgroundX(this);
+			//this.pos.x += distance;
 			this.velocity.x = 0;
 		}
 	}
@@ -247,6 +257,7 @@ class Player {
 
 	stay() {
 		this.changeAnimation('stay');
+		Sounds.pauseAll();
 		this.velocity.x = 0;
 	}
 
@@ -257,12 +268,14 @@ class Player {
 
 	runRight() {
 		this.changeAnimation('run', 'right');
+		Sounds.play('running');
 		this.velocity.x = 10;
 	}
 
 
 	runLeft() {
 		this.changeAnimation('run', 'left');
+		Sounds.play('running');
 		this.velocity.x = -10;
 	}
 
@@ -278,6 +291,8 @@ class Player {
 
 	jump() {
 		if(this.jumpCountdown) {
+			Sounds.pause('running');
+			Sounds.play('jumping');
 			this.velocity.y = -15;
 			this.jumpCountdown--;
 		}
