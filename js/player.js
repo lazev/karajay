@@ -118,56 +118,55 @@ class Player {
 	update() {
 		this.draw();
 
+		this.haveAnimation = false;
+
 		this.pos.x += this.velocity.x;
 
 		this.checkCollisionX();
 
-		this.applyGravity();
-
-		this.checkCollisionY();
-
-		this.withOutAnimation = true;
-
-		if(Keys.pressed[Keys.map.right]) {
-			this.withOutAnimation = false;
+		if(Keys.pressed[Keys.map.down]) {
+			this.pos.y += 11;
+			this.haveAnimation = true;
+			this.crouch();
+		}
+		else if(Keys.pressed[Keys.map.right]) {
+			this.haveAnimation = true;
 			this.runRight();
 		}
 
 		else if(Keys.pressed[Keys.map.left]) {
-			this.withOutAnimation = false;
+			this.haveAnimation = true;
 			this.runLeft();
+		}
+
+		if(this.velocity.y > 0.9) { //???
+			this.haveAnimation = true;
+			this.falling();
+		}
+		else if(this.velocity.y < 0) {
+			this.haveAnimation = true;
+			this.jumping();
 		}
 
 		if(Keys.pressed[Keys.map.jump]) {
 			Keys.pressed[Keys.map.jump] = false;
-			this.withOutAnimation = false;
+			this.haveAnimation = true;
 			this.jump();
 		}
 
 		if(Keys.pressed[Keys.map.dash]) {
-			this.withOutAnimation = false;
+			this.haveAnimation = true;
 			if(this.dashing) return;
 			this.dashing = true;
 			this.dash();
 			setTimeout(() => { this.dashing = false; }, 100);
 		}
 
+		this.applyGravity();
 
-		if(Keys.pressed[Keys.map.down]) {
-         this.pos.y += 11;
-			this.withOutAnimation = false;
-			this.crouch();
-		}
-		else if(this.velocity.y > 0.9) { //???
-			this.withOutAnimation = false;
-			this.falling();
-		}
-      else if(this.velocity.y < 0) {
-			this.withOutAnimation = false;
-			this.jumping();
-		}
+		this.checkCollisionY();
 
-		if(this.withOutAnimation) this.stay();
+		if(!this.haveAnimation) this.stay();
 
 		this.moveCameraX();
 	}
@@ -182,7 +181,6 @@ class Player {
 
 			Scenario.moveScenarioX(this);
 			Background.moveBackgroundX(this);
-			//this.pos.x -= distance-6;
 			this.velocity.x = 0;
 
 		}
@@ -192,7 +190,6 @@ class Player {
 
 			Scenario.moveScenarioX(this);
 			Background.moveBackgroundX(this);
-			//this.pos.x += distance;
 			this.velocity.x = 0;
 		}
 	}
@@ -243,22 +240,23 @@ class Player {
 
 	touchWall(blockId) {
 
-		if(this.velocity.x > 0) {
-			this.stay();
+		this.stay();
+
+		if(this.faceTo == 'right') {
 			this.pos.x = Scenario.pathArray[blockId].pos.x - this.pos.w - 0.01;
 		}
 
-		if(this.velocity.x < 0) {
-			this.stay();
+		if(this.faceTo == 'left') {
 			this.pos.x = Scenario.pathArray[blockId].pos.x + Scenario.pathArray[blockId].pos.w + 0.01;
 		}
+
 	}
 
 
 	stay() {
 		this.changeAnimation('stay');
-		Sounds.pauseAll();
 		this.velocity.x = 0;
+		Sounds.pauseAll();
 	}
 
    crouch() {
