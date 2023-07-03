@@ -1,4 +1,4 @@
-class Adventurer15 {
+class Adventurer15 { //https://rvros.itch.io/
 	constructor() {
 		this.scale = 3;
 
@@ -80,6 +80,32 @@ class Adventurer15 {
 				left: [
 					{ pos: { x: 50,  y: 111, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
 					{ pos: { x: 100, y: 111, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } }
+				]
+			},
+
+			attack1: {
+				framesToChange: 4,
+				right: [
+					{ pos: { x: 250, y: 481, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
+					{ pos: { x: 300, y: 481, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
+					{ pos: { x: 0,   y: 518, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
+				],
+				left: [
+					{ pos: { x: 250, y: 481, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
+					{ pos: { x: 300, y: 481, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
+					{ pos: { x: 0,   y: 518, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
+				]
+			},
+
+			getHit: {
+				framesToChange: 4,
+				right: [
+					{ pos: { x: 150, y: 444, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
+					{ pos: { x: 350, y: 444, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
+				],
+				left: [
+					{ pos: { x: 150, y: 444, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
+					{ pos: { x: 350, y: 444, w: 50, h: 37 }, hit: { x: 20, y: 4, w: 18, h: 29 } },
 				]
 			}
 		};

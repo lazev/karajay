@@ -24,13 +24,17 @@ class Player {
 			y: 1
 		};
 
+		this.life = 100;
+
 		this.maxJumps      = 2;
 		this.jumpCountdown = 0;
 
 		this.dashing = false;
+		this.attacking = false;
+		this.timerAttack = null;
 
 		this.faceTo = 'right';
-		this.currentAnimation = 'stay';
+		this.currentState = 'stay';
 
 		this.currentFrame = 0;
 
@@ -55,21 +59,21 @@ class Player {
 	}
 
 
-	changeAnimation(animation, faceTo) {
-		if(this.currentAnimation != animation || (typeof faceTo != 'undefined' && this.faceTo != faceTo)) {
+	changeState(state, faceTo) {
+		if(this.currentState != state || (typeof faceTo != 'undefined' && this.faceTo != faceTo)) {
 			this.currentFrame = 0;
 		}
 
 		if(faceTo) this.faceTo = faceTo;
-		this.currentAnimation = animation;
+		this.currentState = state;
 	}
 
 
 	draw() {
 
-		let frames    = this.sprite.map[this.currentAnimation][this.faceTo];
+		let frames    = this.sprite.map[this.currentState][this.faceTo];
 		let imgToDraw = this.sprite.image[this.faceTo];
-		let buffer    = this.sprite.map[this.currentAnimation].framesToChange;
+		let buffer    = this.sprite.map[this.currentState].framesToChange;
 
 		if(Engine.elapsedFrames % buffer === 0) {
 			this.currentFrame++;
@@ -83,21 +87,21 @@ class Player {
 		this.pos.w = item.hit.w * this.scale;
 		this.pos.h = item.hit.h * this.scale;
 
-		C.fillStyle = this.color;
-		C.fillRect(
-			this.pos.x,
-			this.pos.y,
-			this.pos.w,
-			this.pos.h
-		);
+		//C.fillStyle = this.color;
+		//C.fillRect(
+		//	this.pos.x,
+		//	this.pos.y,
+		//	this.pos.w,
+		//	this.pos.h
+		//);
 
-		C.fillStyle = 'rgba(255, 0, 0, 0.2)';
-		C.fillRect(
-			this.pos.x - item.hit.x * this.scale,
-			this.pos.y - item.hit.y * this.scale,
-			item.pos.w * this.scale,
-			item.pos.h * this.scale
-		);
+		//C.fillStyle = 'rgba(255, 0, 0, 0.2)';
+		//C.fillRect(
+		//	this.pos.x - item.hit.x * this.scale,
+		//	this.pos.y - item.hit.y * this.scale,
+		//	item.pos.w * this.scale,
+		//	item.pos.h * this.scale
+		//);
 
 		C.drawImage(
 			imgToDraw,
@@ -118,7 +122,7 @@ class Player {
 	update() {
 		this.draw();
 
-		this.haveAnimation = false;
+		this.haveState = false;
 
 		this.pos.x += this.velocity.x;
 
@@ -126,49 +130,140 @@ class Player {
 
 		if(Keys.pressed[Keys.map.down]) {
 			this.pos.y += 11;
-			this.haveAnimation = true;
+			this.haveState = true;
 			this.crouch();
 		}
 		else if(Keys.pressed[Keys.map.right]) {
-			this.haveAnimation = true;
-			this.runRight();
+			if(!this.attacking) {
+				this.haveState = true;
+				this.runRight();
+			}
 		}
 
 		else if(Keys.pressed[Keys.map.left]) {
-			this.haveAnimation = true;
-			this.runLeft();
+			if(!this.attacking) {
+				this.haveState = true;
+				this.runLeft();
+			}
 		}
 
 		if(this.velocity.y > 0.9) { //???
-			this.haveAnimation = true;
-			this.falling();
+			if(!this.attacking) {
+				this.haveState = true;
+				this.falling();
+			}
 		}
 		else if(this.velocity.y < 0) {
-			this.haveAnimation = true;
+			this.haveState = true;
 			this.jumping();
 		}
 
 		if(Keys.pressed[Keys.map.jump]) {
 			Keys.pressed[Keys.map.jump] = false;
-			this.haveAnimation = true;
+			this.haveState = true;
 			this.jump();
 		}
 
 		if(Keys.pressed[Keys.map.dash]) {
-			this.haveAnimation = true;
+			this.haveState = true;
 			if(this.dashing) return;
 			this.dashing = true;
 			this.dash();
 			setTimeout(() => { this.dashing = false; }, 100);
 		}
 
+		if(Keys.pressed[Keys.map.attack1]) {
+			Keys.pressed[Keys.map.attack1] = false;
+			if(this.attacking) return;
+			this.attack1(true);
+			this.timerAttack = setTimeout(() => {
+				this.attack1(false);
+			}, 150);
+		}
+
+		if(this.attacking) {
+			this.haveState = true;
+			this.setAttack();
+		}
+
 		this.applyGravity();
 
 		this.checkCollisionY();
 
-		if(!this.haveAnimation) this.stay();
+		if(!this.haveState) this.stay();
+
+		this.checkGetHit();
 
 		this.moveCameraX();
+	}
+
+
+	attack1(bool) {
+		this.attacking = bool;
+	}
+
+	setAttack() {
+
+		this.changeState('attack1', this.faceTo);
+		this.velocity.x = 0;
+		this.velocity.y = this.velocity.y / 5;
+
+		let attackHitBox = {
+			pos: {
+				x: this.pos.x + ((this.faceTo == 'right') ? 30 : -30),
+				y: this.pos.y,
+				w: this.pos.w,
+				h: this.pos.h
+			}
+		}
+
+		let hitkey = Collisions.checkHitEnemy(attackHitBox);
+
+		if(hitkey !== false) {
+			let hitted = Scenario.enemiesArray[hitkey];
+
+			if(hitted.hitCooldown == false) {
+				hitted.hitCooldown = true;
+				hitted.color = 'white';
+				hitted.pos.x += ((this.faceTo == 'right') ? hitted.recoilWhenHitted : -hitted.recoilWhenHitted);
+				this.pos.x -= ((this.faceTo == 'right') ? 2 : -2);
+				Sounds.play('hitting');
+				setTimeout(() => {
+					hitted.color = 'red';
+					hitted.hitCooldown = false;
+				}, 200);
+
+				hitted.life -= 30;
+				console.log(hitted);
+				if(hitted.life <= 0) delete Scenario.enemiesArray[hitkey];
+			}
+		}
+	}
+
+
+	checkGetHit() {
+		let ret = Collisions.checkEnemyTouch(this);
+		console.log(ret);
+		if(ret !== false) {
+			this.getHit(Scenario.enemiesArray[k]);
+		}
+	}
+
+
+	getHit(enemy) {
+		this.life -= 20;
+		this.changeState('getHit');
+		console.log(this.life);
+		if(this.life <= 0) {
+			alert('morreu');
+			location.reload();
+		}
+		if(enemy.pos.x > this.pos.x) {
+			this.pos.x -= 50;
+		}
+		else {
+			this.pos.x += 50;
+		}
 	}
 
 
@@ -254,25 +349,25 @@ class Player {
 
 
 	stay() {
-		this.changeAnimation('stay');
+		this.changeState('stay');
 		this.velocity.x = 0;
 		Sounds.pauseAll();
 	}
 
    crouch() {
-      this.changeAnimation('crouch');
+      this.changeState('crouch');
       this.velocity.x = 0;
    }
 
 	runRight() {
-		this.changeAnimation('run', 'right');
+		this.changeState('run', 'right');
 		Sounds.play('running');
 		this.velocity.x = 10;
 	}
 
 
 	runLeft() {
-		this.changeAnimation('run', 'left');
+		this.changeState('run', 'left');
 		Sounds.play('running');
 		this.velocity.x = -10;
 	}
@@ -303,12 +398,12 @@ class Player {
 
 
    jumping() {
-      this.changeAnimation('jump', this.faceTo);
+      this.changeState('jump', this.faceTo);
    }
 
 
 	falling() {
-		this.changeAnimation('fall', this.faceTo);
+		this.changeState('fall', this.faceTo);
 	}
 
 }

@@ -2,7 +2,8 @@ const Sounds = {
 
 	map: {
 		running: new Audio('sounds/running.mp3'),
-		jumping: new Audio('sounds/jumping.mp3')
+		jumping: new Audio('sounds/jumping.wav'),
+		hitting: new Audio('sounds/hitting.wav')
 	},
 
 
@@ -24,7 +25,8 @@ const Sounds = {
 
 
 	play: id => {
-		Sounds.map[id].play();
+		if(typeof Sounds.map[id] != 'undefined')
+			Sounds.map[id].play();
 	}
 
 };

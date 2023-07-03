@@ -9,10 +9,10 @@ const scaledCanvas = {
 }
 
 const cameraEdges = {
-	right:  canvas.width  /4 * 3,
-	left:   canvas.width  /4,
-	top:    canvas.height /4,
-	bottom: canvas.height /4 * 3
+	right:  canvas.width  /5 * 3,
+	left:   canvas.width  /5 * 2,
+	top:    canvas.height /5 * 3,
+	bottom: canvas.height /5 * 2
 }
 
 Background.init();
@@ -20,7 +20,9 @@ Sounds.init();
 
 Keys.monitor();
 
-var hero = new Player;
+const hero = new Player;
+
+//const enemy1 = new Enemy;
 
 Scenario.setInitialBlock();
 Scenario.createRandomPath();
@@ -28,7 +30,7 @@ Scenario.createRandomPath();
 Engine.load([
 	Background,
 	hero,
-	//enemy,
+	//enemy1,
 	Scenario
 ])
 

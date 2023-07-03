@@ -10,8 +10,7 @@ const Keys = {
 		jump:    ' ',
 		attack1: 'j',
 		dash:    'Shift',
-		pause:   'p',
-
+		pause:   'p'
 	},
 
 	monitor: () => {

@@ -10,6 +10,28 @@ const Collisions = {
 	},
 
 
+	checkHitEnemy: (obj1) => {
+		if(Scenario.enemiesArray.length) {
+			for(let k in Scenario.enemiesArray) {
+				if(Collisions.checkFull(obj1, Scenario.enemiesArray[k])) return k;
+			}
+		}
+
+		return false;
+	},
+
+
+	checkEnemyTouch: obj1 => {
+		if(Scenario.enemiesArray.length) {
+			for(let k in Scenario.enemiesArray) {
+				if(Collisions.checkFull(obj1, Scenario.enemiesArray[k])) return k;
+			}
+		}
+
+		return false;
+	},
+
+
 	checkFull: (obj1, obj2, debug) => {
 		return (
 			obj1.pos.y + obj1.pos.h >= obj2.pos.y && obj1.pos.y <= obj2.pos.y + obj2.pos.h &&

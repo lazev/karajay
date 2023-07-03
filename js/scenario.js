@@ -11,6 +11,9 @@ const Scenario = {
 	defaultBlockWidth: 6,
 	defaultBlockHeight: 6,
 
+	enemiesArray: [],
+
+
 	setInitialBlock: () => {
 		Scenario.referenceBlock = {
 			pos: {
@@ -30,6 +33,18 @@ const Scenario = {
 		do {
 			block = Scenario.createNextBlock();
 			Scenario.pathArray.push(block);
+
+			let rand = Math.random()*100;
+			if(rand > 98) {
+				Scenario.enemiesArray.push(new Enemy({
+					pos: {
+						x: block.pos.x,
+						y: block.pos.y - 200
+					}
+				}));
+			}
+
+
 		} while(block.pos.x < canvas.width+200);
 
 	},
@@ -95,6 +110,10 @@ const Scenario = {
 			last = Scenario.pathArray[k];
 		}
 
+		for(k in Scenario.enemiesArray) {
+			Scenario.enemiesArray[k].pos.x -= player.velocity.x;
+		}
+
 		Scenario.referenceBlock.pos.x = last.pos.x;
 		Scenario.referenceBlock.pos.y = last.pos.y;
 
@@ -123,6 +142,10 @@ const Scenario = {
 			});
 
 			block.draw();
+		});
+
+		Scenario.enemiesArray.forEach(function(item){
+			item.update();
 		});
 
 	},
