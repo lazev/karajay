@@ -12,8 +12,12 @@ const cameraEdges = {
 	right:  canvas.width  /5 * 3,
 	left:   canvas.width  /5 * 2,
 	top:    canvas.height /5 * 3,
-	bottom: canvas.height /5 * 2
+	bottom: canvas.height /5 * 4
 }
+
+const possibleEnemies = [
+	Guiorg
+];
 
 Background.init();
 Sounds.init();

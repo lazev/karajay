@@ -1,10 +1,6 @@
-class Enemy {
-	constructor({
-		pos = {
-			x: 500,
-			y: 200
-		}
-	}) {
+class Enemy extends Element {
+	constructor({pos, sprite}) {
+		super({pos, sprite});
 
 		this.life = 100;
 
@@ -12,49 +8,22 @@ class Enemy {
 
 		this.color  = 'red';
 
-		this.pos = {
-			x: pos.x || 500,
-			y: pos.y || 0,
-			w: 70,
-			h: 100
-		};
-
-		this.hit = {
-			x: 0,
-			y: 0,
-			w: 0,
-			h: 0
-		};
-
-		this.velocity = {
-			x: 0,
-			y: 1
-		};
-
-		this.recoilWhenHitted = 15;
-	}
-
-	draw() {
-
-		C.fillStyle = this.color;
-
-		C.fillRect(
-			this.pos.x,
-			this.pos.y,
-			this.pos.w,
-			this.pos.h
-		);
-
+		this.recoilWhenHitted = 30;
 	}
 
 
-	applyGravity() {
+	// draw() {
 
-		this.pos.y += this.velocity.y;
+	// 	C.fillStyle = this.color;
 
-		this.velocity.y += Engine.gravity;
-	}
+	// 	C.fillRect(
+	// 		this.pos.x,
+	// 		this.pos.y,
+	// 		this.pos.w,
+	// 		this.pos.h
+	// 	);
 
+	// }
 
 	lookForhero() {
 		let area = {
@@ -75,33 +44,86 @@ class Enemy {
 		//);
 
 		if(Collisions.checkFull(hero, area)) {
-			if(this.pos.x > hero.pos.x) this.velocity.x = -2;
-			else if(this.pos.x < hero.pos.x) this.velocity.x = 2;
-			else this.velocity.x = 0;
-		}
 
+			if(this.checkDistanceToAttack()) {
+				console.log('attack');
+				this.attack();
+			}
+			else if(this.pos.x >= hero.pos.x) {
+				this.runLeft();
+			}
+			else if(this.pos.x < hero.pos.x) {
+				this.runRight();
+			}
+			else {
+				if(this.velocity.x != 0) {
+					setTimeout(() => {
+						this.velocity.x = 0;
+						this.stay();
+					}, 1000);
+				}
+			}
+		}
 	}
 
 
-	checkCollisionY() {
-		let blockId = Collisions.checkScenario(this);
-		if(blockId !== false) {
-			this.touchGround(blockId);
+	checkDistanceToAttack() {
+		if(this.pos.x >= hero.pos.x) {
+			if(this.pos.x - hero.pos.x + hero.pos.w <= this.distanceToAttack) {
+				return true;
+			}
+		} else {
+			if(hero.pos.x - this.pos.x + this.pos.w <= this.distanceToAttack) {
+				return true;
+			}
 		}
+
+		return false;
 	}
 
 
-	checkCollisionX() {
-		let blockId = Collisions.checkScenario(this);
-		if(blockId !== false) {
-			this.touchWall(blockId);
-		}
+	runRight() {
+		this.velocity.x = 6;
+		this.changeState('run', 'right');
 	}
 
 
-	touchGround(blockId) {
-		this.velocity.y = 0;
-		this.pos.y = Scenario.pathArray[blockId].pos.y - this.pos.h - 0.01;
+	runLeft() {
+		this.velocity.x = -6;
+		this.changeState('run', 'left');
+	}
+
+
+	stay() {
+		this.changeState('stay');
+	}
+
+
+	attack() {
+		this.velocity.x = 0;
+		this.changeState('attack');
+	}
+
+
+	getHit(hitkey) {
+		if(this.hitCooldown == false) {
+			this.hitCooldown = true;
+			this.color = 'white';
+			this.pos.x += ((this.faceTo == 'right') ? this.recoilWhenHitted : -this.recoilWhenHitted);
+			this.changeState('gethit');
+
+			this.pos.x -= ((this.faceTo == 'right') ? 10 : -10);
+
+			setTimeout(() => {
+				this.color = 'red';
+				this.hitCooldown = false;
+			}, 200);
+
+			this.life -= 30;
+
+			if(this.life <= 0)
+				delete Scenario.enemiesArray[hitkey];
+		}
 	}
 
 
@@ -110,10 +132,12 @@ class Enemy {
 
 		this.applyGravity();
 
-		this.checkCollisionY();
+		this.checkBlockCollisionY();
 
 		this.lookForhero();
 
 		this.pos.x += this.velocity.x;
+
+		this.checkBlockCollisionX();
 	}
 }

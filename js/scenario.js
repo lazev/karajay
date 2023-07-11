@@ -34,14 +34,21 @@ const Scenario = {
 			block = Scenario.createNextBlock();
 			Scenario.pathArray.push(block);
 
-			let rand = Math.random()*100;
-			if(rand > 98) {
-				Scenario.enemiesArray.push(new Enemy({
-					pos: {
-						x: block.pos.x,
-						y: block.pos.y - 200
-					}
-				}));
+			if(Scenario.pathArray.length > 150) {
+
+				let rand = Engine.randomNumber(0, 100);
+
+				if(rand > 98) {
+
+					rand = Engine.randomNumber(0, possibleEnemies.length-1);
+
+					Scenario.enemiesArray.push(new possibleEnemies[rand]({
+						pos: {
+							x: block.pos.x,
+							y: block.pos.y - 200
+						}
+					}));
+				}
 			}
 
 

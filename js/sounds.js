@@ -3,7 +3,8 @@ const Sounds = {
 	map: {
 		running: new Audio('sounds/running.mp3'),
 		jumping: new Audio('sounds/jumping.wav'),
-		hitting: new Audio('sounds/hitting.wav')
+		hitting: new Audio('sounds/hitting.wav'),
+		gethit:  new Audio('sounds/gethit.mp3')
 	},
 
 
