@@ -69,9 +69,6 @@ class Element {
 
 
 	draw() {
-
-		console.log(1);
-
 		let frames    = this.sprite.map[this.state][this.faceTo];
 		let imgToDraw = this.sprite.image[this.faceTo];
 		let buffer    = this.sprite.map[this.state].framesToChange;
@@ -89,19 +86,14 @@ class Element {
 		this.pos.h = item.hit.h * this.scale;
 
 		//C.fillStyle = this.color;
-		//C.fillRect(
-		//	this.pos.x,
-		//	this.pos.y,
-		//	this.pos.w,
-		//	this.pos.h
-		//);
-//
+		//C.fillRect(this.pos.x, this.pos.y, this.pos.w, this.pos.h);
+
 		//C.fillStyle = 'rgba(255, 0, 0, 0.2)';
 		//C.fillRect(
-		//	this.pos.x - item.hit.x * this.scale,
-		//	this.pos.y - item.hit.y * this.scale,
-		//	item.pos.w * this.scale,
-		//	item.pos.h * this.scale
+		//		this.pos.x - item.hit.x * this.scale,
+		//		this.pos.y - item.hit.y * this.scale,
+		//		item.pos.w * this.scale,
+		//		item.pos.h * this.scale
 		//);
 
 		C.drawImage(

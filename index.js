@@ -24,7 +24,7 @@ Sounds.init();
 
 Keys.monitor();
 
-const hero = new Player;
+Engine.hero = new Player;
 
 //const enemy1 = new Enemy;
 
@@ -33,8 +33,7 @@ Scenario.createRandomPath();
 
 Engine.load([
 	Background,
-	hero,
-	//enemy1,
+	Engine.hero,
 	Scenario
 ])
 

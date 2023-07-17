@@ -6,24 +6,25 @@ class Enemy extends Element {
 
 		this.hitCooldown = false;
 
+		this.hitCooldownTimer = 400;
+
 		this.color  = 'red';
 
 		this.recoilWhenHitted = 30;
 	}
 
 
-	// draw() {
 
-	// 	C.fillStyle = this.color;
+	changeState(state, faceTo) {
+		if(this.state != state || (typeof faceTo != 'undefined' && this.faceTo != faceTo)) {
+			console.log(this.state);
+			this.currentFrame = 0;
+		}
 
-	// 	C.fillRect(
-	// 		this.pos.x,
-	// 		this.pos.y,
-	// 		this.pos.w,
-	// 		this.pos.h
-	// 	);
+		if(faceTo) this.faceTo = faceTo;
+		this.state = state;
+	}
 
-	// }
 
 	lookForhero() {
 		let area = {
@@ -36,23 +37,17 @@ class Enemy extends Element {
 		};
 
 		//C.fillStyle = 'rgba(255, 255, 255, 0.1)';
-		//C.fillRect(
-		//	area.pos.x,
-		//	area.pos.y,
-		//	area.pos.w,
-		//	area.pos.h
-		//);
+		//C.fillRect(area.pos.x, area.pos.y, area.pos.w, area.pos.h);
 
-		if(Collisions.checkFull(hero, area)) {
+		if(Collisions.checkFull(Engine.hero, area)) {
 
 			if(this.checkDistanceToAttack()) {
-				console.log('attack');
 				this.attack();
 			}
-			else if(this.pos.x >= hero.pos.x) {
+			else if(this.pos.x >= Engine.hero.pos.x) {
 				this.runLeft();
 			}
-			else if(this.pos.x < hero.pos.x) {
+			else if(this.pos.x < Engine.hero.pos.x) {
 				this.runRight();
 			}
 			else {
@@ -68,12 +63,30 @@ class Enemy extends Element {
 
 
 	checkDistanceToAttack() {
-		if(this.pos.x >= hero.pos.x) {
-			if(this.pos.x - hero.pos.x + hero.pos.w <= this.distanceToAttack) {
+		if(this.pos.x >= Engine.hero.pos.x) {
+
+			C.fillStyle = 'rgba(255, 255, 255, 0.1)';
+			C.fillRect(
+				this.pos.x - this.distanceToAttack,
+				this.pos.y,
+				this.pos.w + this.distanceToAttack,
+				this.pos.h
+			);
+
+			if(this.pos.x - this.distanceToAttack <= Engine.hero.pos.x + Engine.hero.pos.w) {
 				return true;
 			}
 		} else {
-			if(hero.pos.x - this.pos.x + this.pos.w <= this.distanceToAttack) {
+
+			C.fillStyle = 'rgba(255, 255, 255, 0.1)';
+			C.fillRect(
+				this.pos.x,
+				this.pos.y,
+				this.pos.w + this.distanceToAttack,
+				this.pos.h
+			);
+
+			if(this.pos.x + this.pos.w + this.distanceToAttack >= Engine.hero.pos.x) {
 				return true;
 			}
 		}
@@ -108,6 +121,7 @@ class Enemy extends Element {
 	getHit(hitkey) {
 		if(this.hitCooldown == false) {
 			this.hitCooldown = true;
+
 			this.color = 'white';
 			this.pos.x += ((this.faceTo == 'right') ? this.recoilWhenHitted : -this.recoilWhenHitted);
 			this.changeState('gethit');
@@ -117,7 +131,7 @@ class Enemy extends Element {
 			setTimeout(() => {
 				this.color = 'red';
 				this.hitCooldown = false;
-			}, 200);
+			}, this.hitCooldownTimer);
 
 			this.life -= 30;
 
@@ -134,9 +148,16 @@ class Enemy extends Element {
 
 		this.checkBlockCollisionY();
 
-		this.lookForhero();
+		if(!this.hitCooldown) {
+			this.pos.x += this.velocity.x;
 
-		this.pos.x += this.velocity.x;
+			this.lookForhero();
+		}
+
+		if(!this.state) {
+			console.log('sem state');
+			this.changeState('stay');
+		}
 
 		this.checkBlockCollisionX();
 	}

@@ -1,5 +1,7 @@
 const Engine = {
 
+	hero: null,
+
 	looper: null,
 	thingsToUpdate: [],
 	gravity: 0.9,

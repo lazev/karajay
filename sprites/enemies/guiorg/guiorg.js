@@ -54,21 +54,21 @@ class Guiorg extends Enemy { //https://rvros.itch.io/
 				gethit: {
 					framesToChange: 6,
 					right: [
-						{ pos: { x: 0,   y: 49, w: 50, h: 49 }, hit: { x: 8,  y: 8, w: 18, h: 29 } },
-						{ pos: { x: 50,  y: 49, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
-						{ pos: { x: 100, y: 49, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
-						{ pos: { x: 150, y: 49, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } }
+						{ pos: { x: 0,   y: 144, w: 50, h: 49 }, hit: { x: 8,  y: 8, w: 18, h: 29 } },
+						{ pos: { x: 50,  y: 144, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
+						{ pos: { x: 100, y: 144, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
+						{ pos: { x: 150, y: 144, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } }
 					],
 
 					left: [
-						{ pos: { x: 0,   y: 49, w: 50, h: 49 }, hit: { x: 8,  y: 8, w: 18, h: 29 } },
-						{ pos: { x: 50,  y: 49, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
-						{ pos: { x: 100, y: 49, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
-						{ pos: { x: 150, y: 49, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } }
+						{ pos: { x: 0,   y: 144, w: 50, h: 49 }, hit: { x: 8,  y: 8, w: 18, h: 29 } },
+						{ pos: { x: 50,  y: 144, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
+						{ pos: { x: 100, y: 144, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
+						{ pos: { x: 150, y: 144, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } }
 					]
 				},
 				attack: {
-					framesToChange: 6,
+					framesToChange: 9,
 					right: [
 						{ pos: { x: 150, y: 98, w: 50, h: 49 }, hit: { x: 8,  y: 8, w: 18, h: 29 } },
 						{ pos: { x: 200, y: 98, w: 50, h: 49 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
@@ -91,10 +91,6 @@ class Guiorg extends Enemy { //https://rvros.itch.io/
 
 		super({pos, sprite});
 
-		this.distanceToAttack = 60;
-	}
-
-	attack() {
-		this.changeState('attack')
+		this.distanceToAttack = 100;
 	}
 }
