@@ -16,7 +16,7 @@ class Guiorg extends Enemy { //https://rvros.itch.io/
 				stay: {
 					framesToChange: 14,
 					right: [
-						{ pos: { x: 0,   y: 0, w: 50, h: 48 }, hit: { x: 8,  y: 8, w: 18, h: 29 } },
+						{ pos: { x: 0,   y: 0, w: 50, h: 48 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
 						{ pos: { x: 50,  y: 0, w: 50, h: 48 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
 						{ pos: { x: 100, y: 0, w: 50, h: 48 }, hit: { x: 15, y: 7, w: 18, h: 29 } },
 						{ pos: { x: 150, y: 0, w: 50, h: 48 }, hit: { x: 15, y: 7, w: 18, h: 29 } }

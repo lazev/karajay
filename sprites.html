@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="utf-8" />
+	<title>Karajay</title>
+	<style>
+
+		body { background: lightgrey; }
+
+		canvas {
+			background-color: white;
+			padding: 0;
+			margin: 5px;
+			width: 700px;
+			height: 500px;
+		}
+
+		#coordArea {
+			width: 700px;
+			height: 200px;
+		}
+
+	</style>
+
+</head>
+<body>
+
+	<canvas></canvas>
+
+	<div>
+		Img path:<br>
+		<input type="text" id="imgPath" value="sprites/enemies/guiorg/mapRight.png">
+	</div>
+
+	<div>
+		Coords:<br>
+		<textarea id="coordArea">
+{ "pos": { "x": 0,   "y": 0, "w": 50, "h": 48 }, "hit": { "x": 15, "y": 7, "w": 18, "h": 29 } },
+{ "pos": { "x": 50,  "y": 0, "w": 50, "h": 48 }, "hit": { "x": 15, "y": 7, "w": 18, "h": 29 } },
+{ "pos": { "x": 100, "y": 0, "w": 50, "h": 48 }, "hit": { "x": 15, "y": 7, "w": 18, "h": 29 } },
+{ "pos": { "x": 150, "y": 0, "w": 50, "h": 48 }, "hit": { "x": 15, "y": 7, "w": 18, "h": 29 } }
+		</textarea>
+	</div>
+
+	<div>
+		Frame id:<br>
+		<input type="text" id="coordLineId" value="0">
+	</div>
+
+	<div>
+		Scale:<br>
+		<input type="text" id="scale" value="3">
+	</div>
+
+	<div>
+		<button type="button" onclick="javascript:atualizar()">Atualizar</button>
+	</div>
+
+</body>
+<script>
+
+const canvas = document.querySelector('canvas');
+const C      = canvas.getContext('2d');
+
+arrCoords = [];
+imgToDraw = new Image();
+
+function atualizar() {
+	setArrCoord();
+
+	imgToDraw.src = document.querySelector('#imgPath').value;
+
+	let scale = document.querySelector('#scale').value;
+
+	let item = getLineCoord();
+
+
+	C.drawImage(
+		imgToDraw,
+
+		item.pos.x,
+		item.pos.y,
+		item.pos.w,
+		item.pos.h,
+
+		200 - item.hit.x * scale,
+		100 - item.hit.y * scale,
+		item.pos.w * scale,
+		item.pos.h * scale
+	);
+}
+
+
+function getLineCoord() {
+	let id = document.querySelector('#coordLineId').value;
+	return arrCoords[id];
+}
+
+function setArrCoord() {
+	let tmp = document.querySelector('#coordArea').value;
+
+	let arr = tmp.split(',\n');
+
+	arr.forEach(item => {
+		console.log(item)
+		arrCoords.push( JSON.parse(item) );
+	});
+
+	console.log(arrCoords);
+}
+
+</script>
+</html>
