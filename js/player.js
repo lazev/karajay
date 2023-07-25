@@ -116,7 +116,7 @@ class Player extends Element {
 
 		if(!this.haveState) this.stay();
 
-		this.checkGetHit();
+		//this.checkGetHitOnTouch();
 
 		this.moveCameraX();
 	}
@@ -150,12 +150,7 @@ class Player extends Element {
 	}
 
 
-	checkGetHit() {
-
-
-		return;
-
-
+	checkGetHitOnTouch() {
 		let ret = Collisions.checkEnemyTouch(this);
 		if(ret !== false) {
 			if(!this.hitCooldown) {
@@ -167,24 +162,33 @@ class Player extends Element {
 	}
 
 
+	checkGetHit(enemy) {
+		if(!this.hitCooldown) {
+			this.hitCooldown = true;
+			this.getHit(enemy);
+			setTimeout(()=> { this.hitCooldown = false }, this.hitCooldownTimer);
+		}
+	}
+
+
 	getHit(enemy) {
-		this.life -= 20;
+		this.life -= enemy.attackHitPower;
 		this.changeState('getHit');
 		Sounds.play('gethit');
 		console.log(this.life);
 
 		if(this.life <= 0) {
-			alert('morreu');
-			location.reload();
+			//alert('morreu');
+			//location.reload();
 		}
 
-		if(enemy.pos.x > this.pos.x) {
-			this.pos.x -= 50;
-		}
-		else {
-			this.pos.x += 50;
-		}
-		this.pos.y -= 50;
+		//if(enemy.pos.x > this.pos.x) {
+		//	this.pos.x -= 50;
+		//}
+		//else {
+		//	this.pos.x += 50;
+		//}
+		//this.pos.y -= 50;
 	}
 
 

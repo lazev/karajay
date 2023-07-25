@@ -55,6 +55,7 @@ class Element {
 		this.faceTo = faceTo;
 
 		this.currentFrame = 0;
+
 	}
 
 
@@ -85,16 +86,16 @@ class Element {
 		this.pos.w = item.hit.w * this.scale;
 		this.pos.h = item.hit.h * this.scale;
 
-		C.fillStyle = this.color;
-		C.fillRect(this.pos.x, this.pos.y, this.pos.w, this.pos.h);
+		//C.fillStyle = this.color;
+		//C.fillRect(this.pos.x, this.pos.y, this.pos.w, this.pos.h);
 
-		C.fillStyle = 'rgba(255, 0, 0, 0.2)';
-		C.fillRect(
-				this.pos.x - item.hit.x * this.scale,
-				this.pos.y - item.hit.y * this.scale,
-				item.pos.w * this.scale,
-				item.pos.h * this.scale
-		);
+		//C.fillStyle = 'rgba(255, 0, 0, 0.2)';
+		//C.fillRect(
+		//		this.pos.x - item.hit.x * this.scale,
+		//		this.pos.y - item.hit.y * this.scale,
+		//		item.pos.w * this.scale,
+		//		item.pos.h * this.scale
+		//);
 
 		C.drawImage(
 			imgToDraw,
@@ -135,12 +136,15 @@ class Element {
 
 
 	touchGround(blockId) {
-		if(typeof this.jumpReset == 'function')
-			this.jumpReset();
 
-		this.velocity.y = 0;
+		if(!this.lostScenarioFloor) {
+			if(typeof this.jumpReset == 'function')
+				this.jumpReset();
 
-		this.pos.y = Scenario.pathArray[blockId].pos.y - this.pos.h - 0.01;
+			this.velocity.y = 0;
+
+			this.pos.y = Scenario.pathArray[blockId].pos.y - this.pos.h - 0.01;
+		}
 	}
 
 

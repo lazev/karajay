@@ -16,9 +16,14 @@ class Enemy extends Element {
 
 
 	changeState(state, faceTo) {
+		if(this.state == 'die') return;
+
 		if(this.state != state || (typeof faceTo != 'undefined' && this.faceTo != faceTo)) {
-			console.log(this.state);
 			this.currentFrame = 0;
+			if(this.attackingTimer) {
+				clearTimeout(this.attackingTimer);
+				this.attackingTimer = null;
+			}
 		}
 
 		if(faceTo) this.faceTo = faceTo;
@@ -63,35 +68,32 @@ class Enemy extends Element {
 
 
 	checkDistanceToAttack() {
+
+		let area = {};
+
 		if(this.pos.x >= Engine.hero.pos.x) {
 
-			C.fillStyle = 'rgba(255, 255, 255, 0.1)';
-			C.fillRect(
+			area = [
 				this.pos.x - this.distanceToAttack,
 				this.pos.y,
 				this.pos.w + this.distanceToAttack,
 				this.pos.h
-			);
+			];
 
-			if(this.pos.x - this.distanceToAttack <= Engine.hero.pos.x + Engine.hero.pos.w) {
-				return true;
-			}
 		} else {
 
-			C.fillStyle = 'rgba(255, 255, 255, 0.1)';
-			C.fillRect(
+			area = [
 				this.pos.x,
 				this.pos.y,
 				this.pos.w + this.distanceToAttack,
 				this.pos.h
-			);
-
-			if(this.pos.x + this.pos.w + this.distanceToAttack >= Engine.hero.pos.x) {
-				return true;
-			}
+			];
 		}
 
-		return false;
+		C.fillStyle = 'rgba(255, 255, 255, 0.1)';
+		C.fillRect(...area);
+
+		return Collisions.checkObjArr(Engine.hero, area);
 	}
 
 
@@ -126,22 +128,43 @@ class Enemy extends Element {
 			this.pos.x += ((this.faceTo == 'right') ? this.recoilWhenHitted : -this.recoilWhenHitted);
 			this.changeState('gethit');
 
+			if(this.attackingTimer) clearTimeout(this.attackingTimer);
+
 			this.pos.x -= ((this.faceTo == 'right') ? 10 : -10);
 
 			setTimeout(() => {
-				this.color = 'red';
 				this.hitCooldown = false;
 			}, this.hitCooldownTimer);
 
 			this.life -= 30;
 
-			if(this.life <= 0)
-				delete Scenario.enemiesArray[hitkey];
+			if(this.life <= 0) {
+				this.changeState('die');
+				this.lostScenarioFloor = true;
+				setTimeout(() => {
+					delete Scenario.enemiesArray[hitkey];
+				}, 2000);
+			}
+
 		}
 	}
 
 
+	hitHero() {
+		Engine.hero.checkGetHit(this);
+	}
+
+
 	update() {
+
+
+		if(this.state == 'attack' && this.currentFrame == 5) {
+			if(this.checkDistanceToAttack()) {
+				this.hitHero();
+			}
+		}
+
+
 		this.draw();
 
 		this.applyGravity();
@@ -155,7 +178,6 @@ class Enemy extends Element {
 		}
 
 		if(!this.state) {
-			console.log('sem state');
 			this.changeState('stay');
 		}
 

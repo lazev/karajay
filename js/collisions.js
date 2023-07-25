@@ -40,6 +40,14 @@ const Collisions = {
 	},
 
 
+	checkObjArr: (obj1, arr, debug) => {
+		return (
+			obj1.pos.y + obj1.pos.h >= arr[1] && obj1.pos.y <= arr[1] + arr[3] &&
+			obj1.pos.x <= arr[0] + arr[2] && obj1.pos.x + obj1.pos.w >= arr[0]
+		);
+	},
+
+
 	checkFall: (obj1, obj2) => {
 		return (
 			obj1.pos.y + obj1.pos.h >= obj2.pos.y && obj1.pos.y + obj1.pos.h <= obj2.pos.y + obj2.pos.h &&
