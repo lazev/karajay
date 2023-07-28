@@ -1,6 +1,8 @@
 const Scenario = {
 
 	pathArray: [],
+	platformArray: [],
+	enemiesArray: [],
 
 	referenceBlock:  {},
 
@@ -10,8 +12,6 @@ const Scenario = {
 
 	defaultBlockWidth: 6,
 	defaultBlockHeight: 6,
-
-	enemiesArray: [],
 
 
 	setInitialBlock: () => {
@@ -56,6 +56,20 @@ const Scenario = {
 
 	},
 
+	
+	createRandomPlatforms: () => {
+		
+		Scenario.platformArray.push({
+			pos: {
+				x: Engine.randomNumber(1024, 2000),
+				y: Engine.randomNumber(100, 400),
+				w: 100,
+				h: 16
+			}
+		});
+		
+	},
+	
 
 	createNextBlock: () => {
 
@@ -82,6 +96,10 @@ const Scenario = {
 			Scenario.blocksUntilChangeY = 0;
 
 			let rand = Math.random()*100;
+			
+			if(rand >= 95) {
+				Scenario.createRandomPlatforms();
+			}
 
 			if(rand >= 98) {
 				block.pos.y -= Scenario.blockPlatformHeight;
@@ -117,6 +135,10 @@ const Scenario = {
 			last = Scenario.pathArray[k];
 		}
 
+		for(let k in Scenario.platformArray) {
+			Scenario.platformArray[k].pos.x -= player.velocity.x;
+		}
+
 		for(k in Scenario.enemiesArray) {
 			Scenario.enemiesArray[k].pos.x -= player.velocity.x;
 		}
@@ -135,13 +157,28 @@ const Scenario = {
 		let vel = (player.velocity.y < 0) ? -10 : 10;
 
 		for(let k in Scenario.pathArray) {
-
 			Scenario.pathArray[k].pos.y -= vel;
+		}
+		
+		for(let k in Scenario.platformArray) {
+			Scenario.platformArray[k].pos.y -= vel;
+		}
+		
+		for(k in Scenario.enemiesArray) {
+			Scenario.enemiesArray[k].pos.y -= vel;
 		}
 	},
 
 
 	draw: () => {
+
+		Scenario.platformArray.forEach(function(item){
+			let block = new Blocks({
+				pos: item.pos
+			});
+
+			block.draw();
+		});
 
 		Scenario.pathArray.forEach(function(item){
 			let block = new Blocks({
@@ -150,7 +187,7 @@ const Scenario = {
 
 			block.draw();
 		});
-
+		
 		Scenario.enemiesArray.forEach(function(item){
 			item.update();
 		});

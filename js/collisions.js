@@ -6,6 +6,12 @@ const Collisions = {
 				if(Collisions.checkFull(obj1, Scenario.pathArray[k], debug)) return k;
 			}
 		}
+
+		if(Scenario.platformArray.length) {
+			for(let k in Scenario.platformArray) {
+				if(Collisions.checkFall(obj1, Scenario.platformArray[k], debug)) return k;
+			}
+		}
 		return false;
 	},
 
