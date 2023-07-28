@@ -20,8 +20,6 @@ class Player extends Element {
 			},
 		});
 
-		this.life = 100;
-
 		this.maxJumps      = 2;
 		this.jumpCountdown = 0;
 
@@ -33,6 +31,9 @@ class Player extends Element {
 		this.hitCooldownTimer = 2000;
 
 		this.hitCooldownCounterAnimation = 0;
+		
+		this.totalHealth = 200;
+		this.currentHealth = 200;
 	}
 
 
@@ -119,13 +120,30 @@ class Player extends Element {
 		//this.checkGetHitOnTouch();
 
 		this.moveCameraX();
+		
+		this.setHealthBar();
 	}
 
+	
+	setHealthBar(currentHealth) {
+		
+		let totalHealthBar = 200;
+		
+		let x = this.currentHealth * totalHealthBar / this.totalHealth;
 
+		C.fillStyle = 'gray';
+		C.fillRect(28, 28, totalHealthBar+4, 24);
+
+		C.fillStyle = 'green';
+		C.fillRect(30, 30, x, 20);
+	}	
+
+	
 	attack1(bool) {
 		this.attacking = bool;
 	}
 
+	
 	setAttack() {
 
 		this.changeState('attack1', this.faceTo);
@@ -172,14 +190,13 @@ class Player extends Element {
 
 
 	getHit(enemy) {
-		this.life -= enemy.attackHitPower;
+		this.currentHealth -= enemy.attackHitPower;
 		this.changeState('getHit');
 		Sounds.play('gethit');
-		console.log(this.life);
 
-		if(this.life <= 0) {
-			//alert('morreu');
-			//location.reload();
+		if(this.currentHealth <= 0) {
+			alert('morreu');
+			location.reload();
 		}
 
 		//if(enemy.pos.x > this.pos.x) {

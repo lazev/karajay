@@ -11,8 +11,9 @@ class Enemy extends Element {
 		this.color  = 'red';
 
 		this.recoilWhenHitted = 30;
+		
+		this.dead = false;
 	}
-
 
 
 	changeState(state, faceTo) {
@@ -32,6 +33,7 @@ class Enemy extends Element {
 
 
 	lookForhero() {
+		if(this.dead) return;
 		let area = {
 			pos: {
 				x: this.pos.x - 300,
@@ -68,7 +70,8 @@ class Enemy extends Element {
 
 
 	checkDistanceToAttack() {
-
+		if(this.dead) return;
+		
 		let area = {};
 
 		if(this.pos.x >= Engine.hero.pos.x) {
@@ -98,29 +101,39 @@ class Enemy extends Element {
 
 
 	runRight() {
+		if(this.dead) return;
+		
 		this.velocity.x = 6;
 		this.changeState('run', 'right');
 	}
 
 
 	runLeft() {
+		if(this.dead) return;
+		
 		this.velocity.x = -6;
 		this.changeState('run', 'left');
 	}
 
 
 	stay() {
+		if(this.dead) return;
+		
 		this.changeState('stay');
 	}
 
 
 	attack() {
+		if(this.dead) return;
+		
 		this.velocity.x = 0;
 		this.changeState('attack');
 	}
 
 
 	getHit(hitkey) {
+		if(this.dead) return;
+		
 		if(this.hitCooldown == false) {
 			this.hitCooldown = true;
 
@@ -139,8 +152,9 @@ class Enemy extends Element {
 			this.life -= 30;
 
 			if(this.life <= 0) {
+				this.dead = true;
 				this.changeState('die');
-				this.lostScenarioFloor = true;
+				//this.lostScenarioFloor = true;
 				setTimeout(() => {
 					delete Scenario.enemiesArray[hitkey];
 				}, 2000);
@@ -151,19 +165,19 @@ class Enemy extends Element {
 
 
 	hitHero() {
+		if(this.dead) return;
+		
 		Engine.hero.checkGetHit(this);
 	}
 
 
 	update() {
 
-
 		if(this.state == 'attack' && this.currentFrame == 5) {
 			if(this.checkDistanceToAttack()) {
 				this.hitHero();
 			}
 		}
-
 
 		this.draw();
 
