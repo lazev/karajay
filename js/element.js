@@ -120,22 +120,22 @@ class Element {
 
 
 	checkBlockCollisionY() {
-		let blockId = Collisions.checkScenario(this);
-		if(blockId !== false) {
-			this.touchGround(blockId);
+		let block = Collisions.checkScenario(this);
+		if(block !== false) {
+			this.touchGround(block);
 		}
 	}
 
 
 	checkBlockCollisionX() {
-		let blockId = Collisions.checkScenario(this);
-		if(blockId !== false) {
-			this.touchWall(blockId);
+		let block = Collisions.checkScenario(this);
+		if(block !== false) {
+			this.touchWall(block);
 		}
 	}
 
 
-	touchGround(blockId) {
+	touchGround(block) {
 
 		if(!this.lostScenarioFloor) {
 			if(typeof this.jumpReset == 'function')
@@ -143,21 +143,21 @@ class Element {
 
 			this.velocity.y = 0;
 
-			this.pos.y = Scenario.pathArray[blockId].pos.y - this.pos.h - 0.01;
+			this.pos.y = block.pos.y - this.pos.h - 0.01;
 		}
 	}
 
 
-	touchWall(blockId) {
+	touchWall(block) {
 
 		this.stay();
 
 		if(this.faceTo == 'right') {
-			this.pos.x = Scenario.pathArray[blockId].pos.x - this.pos.w - 0.01;
+			this.pos.x = block.pos.x - this.pos.w - 0.01;
 		}
 
 		if(this.faceTo == 'left') {
-			this.pos.x = Scenario.pathArray[blockId].pos.x + Scenario.pathArray[blockId].pos.w + 0.01;
+			this.pos.x = block.pos.x + block.pos.w + 0.01;
 		}
 	}
 

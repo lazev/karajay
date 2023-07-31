@@ -31,7 +31,7 @@ class Player extends Element {
 		this.hitCooldownTimer = 2000;
 
 		this.hitCooldownCounterAnimation = 0;
-		
+
 		this.totalHealth = 200;
 		this.currentHealth = 200;
 	}
@@ -120,15 +120,15 @@ class Player extends Element {
 		//this.checkGetHitOnTouch();
 
 		this.moveCameraX();
-		
+
 		this.setHealthBar();
 	}
 
-	
+
 	setHealthBar(currentHealth) {
-		
+
 		let totalHealthBar = 200;
-		
+
 		let x = this.currentHealth * totalHealthBar / this.totalHealth;
 
 		C.fillStyle = 'gray';
@@ -136,14 +136,14 @@ class Player extends Element {
 
 		C.fillStyle = 'green';
 		C.fillRect(30, 30, x, 20);
-	}	
+	}
 
-	
+
 	attack1(bool) {
 		this.attacking = bool;
 	}
 
-	
+
 	setAttack() {
 
 		this.changeState('attack1', this.faceTo);
@@ -195,8 +195,7 @@ class Player extends Element {
 		Sounds.play('gethit');
 
 		if(this.currentHealth <= 0) {
-			alert('morreu');
-			location.reload();
+			Engine.endGame();
 		}
 
 		//if(enemy.pos.x > this.pos.x) {

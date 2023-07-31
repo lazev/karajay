@@ -3,13 +3,13 @@ const Collisions = {
 	checkScenario: (obj1, debug) => {
 		if(Scenario.pathArray.length) {
 			for(let k in Scenario.pathArray) {
-				if(Collisions.checkFull(obj1, Scenario.pathArray[k], debug)) return k;
+				if(Collisions.checkFull(obj1, Scenario.pathArray[k], debug)) return Scenario.pathArray[k];
 			}
 		}
 
 		if(Scenario.platformArray.length) {
 			for(let k in Scenario.platformArray) {
-				if(Collisions.checkFall(obj1, Scenario.platformArray[k], debug)) return k;
+				if(Collisions.checkFall(obj1, Scenario.platformArray[k], debug)) return Scenario.platformArray[k];
 			}
 		}
 		return false;

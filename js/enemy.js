@@ -11,7 +11,7 @@ class Enemy extends Element {
 		this.color  = 'red';
 
 		this.recoilWhenHitted = 30;
-		
+
 		this.dead = false;
 	}
 
@@ -65,13 +65,17 @@ class Enemy extends Element {
 					}, 1000);
 				}
 			}
+		} else {
+			if(this.velocity.x == 0) {
+				this.stay();
+			}
 		}
 	}
 
 
 	checkDistanceToAttack() {
 		if(this.dead) return;
-		
+
 		let area = {};
 
 		if(this.pos.x >= Engine.hero.pos.x) {
@@ -102,7 +106,7 @@ class Enemy extends Element {
 
 	runRight() {
 		if(this.dead) return;
-		
+
 		this.velocity.x = 6;
 		this.changeState('run', 'right');
 	}
@@ -110,7 +114,7 @@ class Enemy extends Element {
 
 	runLeft() {
 		if(this.dead) return;
-		
+
 		this.velocity.x = -6;
 		this.changeState('run', 'left');
 	}
@@ -118,14 +122,14 @@ class Enemy extends Element {
 
 	stay() {
 		if(this.dead) return;
-		
+
 		this.changeState('stay');
 	}
 
 
 	attack() {
 		if(this.dead) return;
-		
+
 		this.velocity.x = 0;
 		this.changeState('attack');
 	}
@@ -133,7 +137,7 @@ class Enemy extends Element {
 
 	getHit(hitkey) {
 		if(this.dead) return;
-		
+
 		if(this.hitCooldown == false) {
 			this.hitCooldown = true;
 
@@ -166,7 +170,7 @@ class Enemy extends Element {
 
 	hitHero() {
 		if(this.dead) return;
-		
+
 		Engine.hero.checkGetHit(this);
 	}
 
