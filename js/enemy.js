@@ -97,8 +97,8 @@ class Enemy extends Element {
 			];
 		}
 
-		C.fillStyle = 'rgba(255, 255, 255, 0.1)';
-		C.fillRect(...area);
+		//C.fillStyle = 'rgba(255, 255, 255, 0.1)';
+		//C.fillRect(...area);
 
 		return Collisions.checkObjArr(Engine.hero, area);
 	}

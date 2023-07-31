@@ -56,20 +56,20 @@ const Scenario = {
 
 	},
 
-	
+
 	createRandomPlatforms: () => {
-		
+
 		Scenario.platformArray.push({
 			pos: {
 				x: Engine.randomNumber(1024, 2000),
 				y: Engine.randomNumber(100, 400),
-				w: 100,
+				w: 200,
 				h: 16
 			}
 		});
-		
+
 	},
-	
+
 
 	createNextBlock: () => {
 
@@ -96,7 +96,7 @@ const Scenario = {
 			Scenario.blocksUntilChangeY = 0;
 
 			let rand = Math.random()*100;
-			
+
 			if(rand >= 95) {
 				Scenario.createRandomPlatforms();
 			}
@@ -159,11 +159,11 @@ const Scenario = {
 		for(let k in Scenario.pathArray) {
 			Scenario.pathArray[k].pos.y -= vel;
 		}
-		
+
 		for(let k in Scenario.platformArray) {
 			Scenario.platformArray[k].pos.y -= vel;
 		}
-		
+
 		for(k in Scenario.enemiesArray) {
 			Scenario.enemiesArray[k].pos.y -= vel;
 		}
@@ -187,7 +187,7 @@ const Scenario = {
 
 			block.draw();
 		});
-		
+
 		Scenario.enemiesArray.forEach(function(item){
 			item.update();
 		});

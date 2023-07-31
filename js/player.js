@@ -17,7 +17,7 @@ class Player extends Element {
 				y: 0,
 				w: 0,
 				h: 0
-			},
+			}
 		});
 
 		this.maxJumps      = 2;
@@ -32,8 +32,8 @@ class Player extends Element {
 
 		this.hitCooldownCounterAnimation = 0;
 
-		this.totalHealth = 200;
-		this.currentHealth = 200;
+		this.totalHealth = 150;
+		this.currentHealth = 150;
 	}
 
 
