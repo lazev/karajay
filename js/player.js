@@ -131,6 +131,8 @@ class Player extends Element {
 
 		let x = this.currentHealth * totalHealthBar / this.totalHealth;
 
+		if(x < 0) x = 0;
+
 		C.fillStyle = 'gray';
 		C.fillRect(28, 28, totalHealthBar+4, 24);
 
