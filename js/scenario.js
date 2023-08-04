@@ -173,19 +173,27 @@ const Scenario = {
 	draw: () => {
 
 		Scenario.platformArray.forEach(function(item){
-			let block = new Blocks({
-				pos: item.pos
-			});
+			if(item.pos.x+item.pos.w > 0 && item.pos.x < canvas.width) {
+				let block = new Blocks({pos: item.pos});
+				block.drawBack();
+			}
+		});
 
-			block.draw();
+		Scenario.platformArray.forEach(function(item){
+			if(item.pos.x+item.pos.w > 0 && item.pos.x < canvas.width) {
+				let block = new Blocks({pos: item.pos});
+				block.drawFront();
+			}
 		});
 
 		Scenario.pathArray.forEach(function(item){
-			let block = new Blocks({
-				pos: item.pos
-			});
+			if(item.pos.x+item.pos.w > 0 && item.pos.x < canvas.width) {
+				let block = new Blocks({
+					pos: item.pos
+				});
 
-			block.draw();
+				block.draw();
+			}
 		});
 
 		Scenario.enemiesArray.forEach(function(item){

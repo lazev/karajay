@@ -9,13 +9,22 @@ class Blocks {
 
 
 	draw() {
-		C.fillStyle = 'darkgreen';
-		C.fillRect(this.pos.x, this.pos.y, this.pos.w, this.pos.h);
-
-		C.fillStyle = '#221515';
-		C.fillRect(this.pos.x, this.pos.y + this.pos.h, this.pos.w, canvas.height - this.pos.y);
+		this.drawBack();
+		this.drawFront();
 	}
-
+	
+	
+	drawBack() {
+		C.fillStyle = '#221515';
+		C.fillRect(this.pos.x, this.pos.y + this.pos.h, this.pos.w, canvas.height - this.pos.y);		
+	}
+	
+	
+	drawFront() {
+		C.fillStyle = 'darkgreen';
+		C.fillRect(this.pos.x, this.pos.y, this.pos.w, this.pos.h);		
+	}
+	
 
 	update() {
 		this.draw();
