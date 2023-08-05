@@ -24,7 +24,9 @@ class Player extends Element {
 		this.jumpCountdown = 0;
 
 		this.dashing = false;
-		this.attacking = false;
+
+		this.attacking = 0;
+
 		this.timerAttack = null;
 
 		this.hitCooldown = false;
@@ -106,9 +108,18 @@ class Player extends Element {
 			}, 150);
 		}
 
+		if(Keys.pressed[Keys.map.attack2]) {
+			Keys.pressed[Keys.map.attack2] = false;
+			if(this.attacking) return;
+			this.attack2(true);
+			this.timerAttack = setTimeout(() => {
+				this.attack2(false);
+			}, 150);
+		}
+
 		if(this.attacking) {
 			this.haveState = true;
-			this.setAttack();
+			this.setAttack(this.attacking);
 		}
 
 		this.applyGravity();
@@ -142,24 +153,34 @@ class Player extends Element {
 
 
 	attack1(bool) {
-		this.attacking = bool;
+		this.attacking = (bool) ? 1 : 0;
 	}
 
 
-	setAttack() {
+	attack2(bool) {
+		this.attacking = (bool) ? 2 : 0;
+	}
 
-		this.changeState('attack1', this.faceTo);
+
+	setAttack(attackId) {
+
+		this.changeState('attack'+ attackId, this.faceTo);
 		this.velocity.x = 0;
 		this.velocity.y = this.velocity.y / 5;
 
-		let attackHitBox = {
-			pos: {
-				x: this.pos.x + ((this.faceTo == 'right') ? 100 : -100),
-				y: this.pos.y,
-				w: this.pos.w,
-				h: this.pos.h
+		let attackHitBox;
+
+		if(attackId == 1) {
+			attackHitBox = {
+				pos: {
+					x: this.pos.x + ((this.faceTo == 'right') ? 100 : -100),
+					y: this.pos.y,
+					w: this.pos.w,
+					h: this.pos.h
+				}
 			}
 		}
+
 
 		let hitkey = Collisions.checkHitEnemy(attackHitBox);
 

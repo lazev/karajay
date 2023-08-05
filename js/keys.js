@@ -9,6 +9,7 @@ const Keys = {
 		down:    's',
 		jump:    ' ',
 		attack1: 'j',
+		attack2: 'k',
 		dash:    'Shift',
 		pause:   'p'
 	},
