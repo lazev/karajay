@@ -16,12 +16,21 @@ const Collisions = {
 	},
 
 
-	checkHitEnemy: (obj1) => {
+	checkHitEnemy: (obj1, multiple) => {
+		let arrRet = [];
 		if(Scenario.enemiesArray.length) {
 			for(let k in Scenario.enemiesArray) {
-				if(Collisions.checkFull(obj1, Scenario.enemiesArray[k])) return k;
+				if(Collisions.checkFull(obj1, Scenario.enemiesArray[k])) {
+					if(multiple) {
+						arrRet.push(k);
+					} else {
+						return k;
+					}
+				}
 			}
 		}
+		
+		if(arrRet.length) return arrRet;
 
 		return false;
 	},

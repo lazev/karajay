@@ -181,12 +181,13 @@ class Player extends Element {
 			}
 		}
 
+		let hitArrKey = Collisions.checkHitEnemy(attackHitBox, true); //true: multiple hits
 
-		let hitkey = Collisions.checkHitEnemy(attackHitBox);
-
-		if(hitkey !== false) {
+		if(hitArrKey.length) {
 			Sounds.play('hitting');
-			Scenario.enemiesArray[hitkey].getHit(hitkey);
+			hitArrKey.forEach(hitkey => {
+				Scenario.enemiesArray[hitkey].getHit(hitkey);
+			});
 		}
 	}
 
