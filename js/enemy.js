@@ -1,4 +1,4 @@
-class Enemy extends Element {
+class Enemy extends Objects {
 	constructor({pos, sprite}) {
 		super({pos, sprite});
 
@@ -135,7 +135,7 @@ class Enemy extends Element {
 	}
 
 
-	getHit(hitkey) {
+	getHit(hitkey, damage) {
 		if(this.dead) return;
 
 		if(this.hitCooldown == false) {
@@ -153,7 +153,7 @@ class Enemy extends Element {
 				this.hitCooldown = false;
 			}, this.hitCooldownTimer);
 
-			this.life -= 30;
+			this.life -= damage;
 
 			if(this.life <= 0) {
 				this.dead = true;

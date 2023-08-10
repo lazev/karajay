@@ -57,6 +57,7 @@ const Engine = {
 		C.textAlign = "center";
 		C.fillText("Morreu", canvas.width/2, canvas.height/2);
 		Engine.gameOver = true;
+		Sounds.pauseAll();
 
 	}
 

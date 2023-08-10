@@ -124,8 +124,8 @@ class Guiorg extends Enemy { //https://rvros.itch.io/
 			}
 		}
 
-		sprite.image.right.src = 'sprites/enemies/guiorg/mapRight.png';
-		sprite.image.left.src  = 'sprites/enemies/guiorg/mapLeft.png';
+		sprite.image.right.src = 'objects/enemies/guiorg/mapRight.png';
+		sprite.image.left.src  = 'objects/enemies/guiorg/mapLeft.png';
 
 		super({pos, sprite});
 

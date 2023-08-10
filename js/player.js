@@ -1,4 +1,4 @@
-class Player extends Element {
+class Player extends Objects {
 	constructor() {
 		super({
 			sprite: new Adventurer15,
@@ -30,7 +30,7 @@ class Player extends Element {
 		this.timerAttack = null;
 
 		this.hitCooldown = false;
-		this.hitCooldownTimer = 2000;
+		this.hitCooldownTimer = 1000;
 
 		this.hitCooldownCounterAnimation = 0;
 
@@ -42,7 +42,7 @@ class Player extends Element {
 	update() {
 
 		if(this.hitCooldown) {
-			C.globalAlpha = 0.2;
+			C.globalAlpha = 0.5;
 		}
 
 		this.draw();
@@ -133,6 +133,14 @@ class Player extends Element {
 		this.moveCameraX();
 
 		this.setHealthBar();
+
+		C.fillStyle = 'rgba(123,123,123,0.4)';
+		C.fillRect(
+			this.pos.x + ((this.faceTo == 'left') ? -797 : 50),
+			this.pos.y + 25,
+			800,
+			5
+		)
 	}
 
 
@@ -147,7 +155,7 @@ class Player extends Element {
 		C.fillStyle = 'gray';
 		C.fillRect(28, 28, totalHealthBar+4, 24);
 
-		C.fillStyle = 'green';
+		C.fillStyle = 'yellow';
 		C.fillRect(30, 30, x, 20);
 	}
 
@@ -168,27 +176,16 @@ class Player extends Element {
 		this.velocity.x = 0;
 		this.velocity.y = this.velocity.y / 5;
 
-		let attackHitBox;
+		let weapon;
 
 		if(attackId == 1) {
-			attackHitBox = {
-				pos: {
-					x: this.pos.x + ((this.faceTo == 'right') ? 100 : -100),
-					y: this.pos.y,
-					w: this.pos.w,
-					h: this.pos.h
-				}
-			}
+			weapon = new GreyBlade;
+		}
+		else if(attackId == 2) {
+			weapon = new Pistol;
 		}
 
-		let hitArrKey = Collisions.checkHitEnemy(attackHitBox, true); //true: multiple hits
-
-		if(hitArrKey.length) {
-			Sounds.play('hitting');
-			hitArrKey.forEach(hitkey => {
-				Scenario.enemiesArray[hitkey].getHit(hitkey);
-			});
-		}
+		weapon.attack();
 	}
 
 

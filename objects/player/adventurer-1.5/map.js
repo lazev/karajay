@@ -3,8 +3,8 @@ class Adventurer15 { //https://rvros.itch.io/
 		this.scale = 3;
 
 		this.image = { right: new Image(), left: new Image() };
-		this.image.right.src = 'sprites/player/adventurer-1.5/mapRight.png';
-		this.image.left.src  = 'sprites/player/adventurer-1.5/mapLeft.png';
+		this.image.right.src = 'objects/player/adventurer-1.5/mapRight.png';
+		this.image.left.src  = 'objects/player/adventurer-1.5/mapLeft.png';
 
 		this.map = {
 			stay: {

@@ -207,6 +207,4 @@ const Scenario = {
 		Scenario.draw();
 	}
 
-
-
 };
