@@ -133,5 +133,8 @@ class Guiorg extends Enemy { //https://rvros.itch.io/
 		this.delayToAttack = 800;
 		this.attackHitPower = 20;
 		this.frameToTrigerAttack = 5;
+		this.maxLife = 100;
+		this.life = this.maxLife;
+		this.speed = Engine.randomNumber(4, 7);
 	}
 }

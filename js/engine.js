@@ -29,8 +29,8 @@ const Engine = {
 		} else {
 
 			if(!Engine.gameOver) {
-				window.requestAnimationFrame(Engine.run);
-				//Engine.looper = setTimeout(Engine.run, 150);
+				//window.requestAnimationFrame(Engine.run);
+				Engine.looper = setTimeout(Engine.run, 150);
 
 				Engine.elapsedFrames++;
 
@@ -47,6 +47,14 @@ const Engine = {
 
 	randomNumber: (min, max) => {
 		return Math.floor(Math.random() * (max - min + 1) + min);
+	},
+
+
+	calcHitDamage: damageBase => {
+		let rand = Math.floor(Math.random()*40) - 30;
+		let retDamage = Math.floor(damageBase + damageBase * rand / 100);
+		console.log('Dano', damageBase, rand, retDamage);
+		return retDamage;
 	},
 
 

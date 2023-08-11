@@ -2,8 +2,6 @@ class Enemy extends Objects {
 	constructor({pos, sprite}) {
 		super({pos, sprite});
 
-		this.life = 100;
-
 		this.hitCooldown = false;
 
 		this.hitCooldownTimer = 400;
@@ -13,6 +11,59 @@ class Enemy extends Objects {
 		this.recoilWhenHitted = 30;
 
 		this.dead = false;
+
+		this.panicRunFaceTo = '';
+
+		this.panicRunTimer  = null;
+	}
+
+
+	update() {
+
+		if(this.state == 'attack' && this.currentFrame == 5) {
+			if(this.checkDistanceToAttack()) {
+				this.hitHero();
+			}
+		}
+
+		this.draw();
+
+		this.applyGravity();
+
+		this.checkBlockCollisionY();
+
+		if(!this.hitCooldown) {
+			this.pos.x += this.velocity.x;
+
+			this.lookForhero();
+
+			this.panicRunning();
+		}
+
+		if(!this.state) {
+			this.changeState('stay');
+		}
+
+		this.checkBlockCollisionX();
+
+		this.setHealthBar();
+	}
+
+
+	setHealthBar(currentHealth) {
+		if(this.dead) return;
+
+		let totalHealthSize = 60;
+
+		let x = this.life * totalHealthSize / this.maxLife;
+
+		if(x < 0) x = 0;
+
+		C.fillStyle = 'gray';
+		C.fillRect(this.pos.x+10, this.pos.y-20, totalHealthSize+2, 6);
+
+		C.fillStyle = 'red';
+		C.fillRect(this.pos.x+11, this.pos.y-19, x, 4);
 	}
 
 
@@ -47,6 +98,10 @@ class Enemy extends Objects {
 		//C.fillRect(area.pos.x, area.pos.y, area.pos.w, area.pos.h);
 
 		if(Collisions.checkFull(Engine.hero, area)) {
+
+			if(this.panicRunTimer) {
+				this.panicRunStop();
+			}
 
 			if(this.checkDistanceToAttack()) {
 				this.attack();
@@ -107,7 +162,7 @@ class Enemy extends Objects {
 	runRight() {
 		if(this.dead) return;
 
-		this.velocity.x = 6;
+		this.velocity.x = this.speed;
 		this.changeState('run', 'right');
 	}
 
@@ -115,7 +170,7 @@ class Enemy extends Objects {
 	runLeft() {
 		if(this.dead) return;
 
-		this.velocity.x = -6;
+		this.velocity.x = -this.speed;
 		this.changeState('run', 'left');
 	}
 
@@ -135,13 +190,12 @@ class Enemy extends Objects {
 	}
 
 
-	getHit(hitkey, damage) {
+	getHit(hitkey, damage, distance) {
 		if(this.dead) return;
 
 		if(this.hitCooldown == false) {
 			this.hitCooldown = true;
 
-			this.color = 'white';
 			this.pos.x += ((this.faceTo == 'right') ? this.recoilWhenHitted : -this.recoilWhenHitted);
 			this.changeState('gethit');
 
@@ -153,10 +207,11 @@ class Enemy extends Objects {
 				this.hitCooldown = false;
 			}, this.hitCooldownTimer);
 
-			this.life -= damage;
+			this.life -= Engine.calcHitDamage(damage);
 
 			if(this.life <= 0) {
 				this.dead = true;
+				this.velocity.x = 0;
 				this.changeState('die');
 				//this.lostScenarioFloor = true;
 				setTimeout(() => {
@@ -164,6 +219,8 @@ class Enemy extends Objects {
 				}, 2000);
 			}
 
+			if(Scenario.enemiesArray[hitkey])
+				Scenario.enemiesArray[hitkey].panicRunStart((distance < 0) ? 'right' : 'left');
 		}
 	}
 
@@ -175,30 +232,31 @@ class Enemy extends Objects {
 	}
 
 
-	update() {
+	panicRunStop() {
+		clearTimeout(this.panicRunTimer);
+		this.panicRunTimer = null;
+		this.panicRunFaceTo = '';
+	}
 
-		if(this.state == 'attack' && this.currentFrame == 5) {
-			if(this.checkDistanceToAttack()) {
-				this.hitHero();
-			}
+
+	panicRunStart(leftOrRight) {
+		this.panicRunStop();
+		this.panicRunFaceTo = leftOrRight;
+		this.panicRunTimer = setTimeout(()=>{
+			this.panicRunStop();
+		}, 4000);
+	}
+
+
+	panicRunning() {
+		if(this.panicRunFaceTo == 'left') {
+			this.runLeft();
+			return true;
 		}
-
-		this.draw();
-
-		this.applyGravity();
-
-		this.checkBlockCollisionY();
-
-		if(!this.hitCooldown) {
-			this.pos.x += this.velocity.x;
-
-			this.lookForhero();
+		else if(this.panicRunFaceTo == 'right') {
+			this.runRight();
+			return true;
 		}
-
-		if(!this.state) {
-			this.changeState('stay');
-		}
-
-		this.checkBlockCollisionX();
+		return false;
 	}
 }

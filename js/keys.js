@@ -10,7 +10,7 @@ const Keys = {
 		jump:    ' ',
 		attack1: 'j',
 		attack2: 'k',
-		dash:    'Shift',
+		dash:    'shift',
 		pause:   'p'
 	},
 
@@ -18,11 +18,11 @@ const Keys = {
 
 		window.addEventListener('keydown', function(ev){
 			//console.log(ev.key);
-			Keys.pressed[ev.key] = true;
+			Keys.pressed[ev.key.toLowerCase()] = true;
 		});
 
 		window.addEventListener('keyup', function(ev){
-			Keys.pressed[ev.key] = false;
+			Keys.pressed[ev.key.toLowerCase()] = false;
 		});
 
 	}

@@ -56,7 +56,7 @@ class Player extends Objects {
 		this.checkBlockCollisionX();
 
 		if(Keys.pressed[Keys.map.down]) {
-			this.pos.y += 11;
+			this.pos.y += 15;
 			this.haveState = true;
 			this.crouch();
 		}
@@ -66,7 +66,6 @@ class Player extends Objects {
 				this.runRight();
 			}
 		}
-
 		else if(Keys.pressed[Keys.map.left]) {
 			if(!this.attacking) {
 				this.haveState = true;
@@ -75,7 +74,7 @@ class Player extends Objects {
 		}
 
 		if(this.velocity.y > 0.9) { //???
-			if(!this.attacking) {
+			if(!this.attacking && this.state != 'crouch') {
 				this.haveState = true;
 				this.falling();
 			}
@@ -96,7 +95,7 @@ class Player extends Objects {
 			if(this.dashing) return;
 			this.dashing = true;
 			this.dash();
-			setTimeout(() => { this.dashing = false; }, 100);
+			setTimeout(() => { this.dashing = false; }, 700);
 		}
 
 		if(Keys.pressed[Keys.map.attack1]) {
@@ -134,13 +133,13 @@ class Player extends Objects {
 
 		this.setHealthBar();
 
-		C.fillStyle = 'rgba(123,123,123,0.4)';
-		C.fillRect(
-			this.pos.x + ((this.faceTo == 'left') ? -797 : 50),
-			this.pos.y + 25,
-			800,
-			5
-		)
+		//C.fillStyle = 'rgba(123,123,123,0.4)';
+		//C.fillRect(
+		//	this.pos.x + ((this.faceTo == 'left') ? -797 : 50),
+		//	this.pos.y + 25,
+		//	800,
+		//	5
+		//)
 	}
 
 
@@ -211,7 +210,7 @@ class Player extends Objects {
 
 
 	getHit(enemy) {
-		this.currentHealth -= enemy.attackHitPower;
+		this.currentHealth -= Engine.calcHitDamage(enemy.attackHitPower);
 		this.changeState('getHit');
 		Sounds.play('gethit');
 
@@ -299,9 +298,9 @@ class Player extends Objects {
 
 	dash() {
 		if(this.faceTo == 'right') {
-			this.velocity.x = 20;
+			this.velocity.x += 200;
 		} else {
-			this.velocity.x = -20;
+			this.velocity.x += -200;
 		}
 	}
 

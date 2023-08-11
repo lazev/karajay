@@ -2,7 +2,7 @@ class Pistol {
 
 	constructor() {
 
-		this.hitDamage = 50;
+		this.hitDamage = 32;
 
 		this.multipleHit = false;
 
@@ -26,9 +26,9 @@ class Pistol {
 
 		let hitArrKey = Collisions.checkHitEnemy(attackHitBox, true);
 
-
 		let nearestEnemy = 0;
 		let minorDistance = 9999;
+		let distance = 0;
 
 		if(hitArrKey.length) {
 
@@ -36,15 +36,15 @@ class Pistol {
 
 			hitArrKey.forEach(hitkey => {
 				if(Scenario.enemiesArray[hitkey]) {
-					console.log(hitkey, Scenario.enemiesArray[hitkey]);
-					if(Math.abs(Scenario.enemiesArray[hitkey].pos.x - Engine.hero.x) < minorDistance) {
-						console.log(minorDistance);
-						minorDistance = Scenario.enemiesArray[hitkey].pos.x - Engine.hero.x;
+					distance = Scenario.enemiesArray[hitkey].pos.x - Engine.hero.pos.x;
+					if(Math.abs(distance) < minorDistance) {
+						minorDistance = Math.abs(distance);
 						nearestEnemy = hitkey;
 					}
 				}
 			});
-			Scenario.enemiesArray[nearestEnemy].getHit(nearestEnemy, this.hitDamage);
+
+			Scenario.enemiesArray[nearestEnemy].getHit(nearestEnemy, this.hitDamage, distance);
 		}
 	}
 }
