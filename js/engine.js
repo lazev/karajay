@@ -29,8 +29,8 @@ const Engine = {
 		} else {
 
 			if(!Engine.gameOver) {
-				//window.requestAnimationFrame(Engine.run);
-				Engine.looper = setTimeout(Engine.run, 150);
+				window.requestAnimationFrame(Engine.run);
+				//Engine.looper = setTimeout(Engine.run, 150);
 
 				Engine.elapsedFrames++;
 
@@ -66,6 +66,13 @@ const Engine = {
 		C.fillText("Morreu", canvas.width/2, canvas.height/2);
 		Engine.gameOver = true;
 		Sounds.pauseAll();
+
+	},
+
+
+	score: () => {
+
+		kills:
 
 	}
 

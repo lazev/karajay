@@ -44,7 +44,17 @@ class Pistol {
 				}
 			});
 
-			Scenario.enemiesArray[nearestEnemy].getHit(nearestEnemy, this.hitDamage, distance);
+			let block = Collisions.checkScenario(attackHitBox);
+			let distanceBlock = 9999;
+
+			if(block) distanceBlock = block.pos.x - Engine.hero.pos.x
+
+			if(!block || Math.abs(distance) < Math.abs(distanceBlock)) {
+				console.log('Hit', Math.abs(distance), Math.abs(distanceBlock));
+				Scenario.enemiesArray[nearestEnemy].getHit(nearestEnemy, this.hitDamage, distance);
+			} else {
+				console.log('Dano bloqueado pelo cenário', Math.abs(distance), Math.abs(distanceBlock));
+			}
 		}
 	}
 }
