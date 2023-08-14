@@ -9,6 +9,8 @@ const Engine = {
 	elapsedFrames: 0,
 
 	gameOver: false,
+	
+	totalKills: 0,
 
 	load: arr => {
 		Engine.thingsToUpdate = arr;
@@ -66,13 +68,6 @@ const Engine = {
 		C.fillText("Morreu", canvas.width/2, canvas.height/2);
 		Engine.gameOver = true;
 		Sounds.pauseAll();
-
-	},
-
-
-	score: () => {
-
-		kills:
 
 	}
 

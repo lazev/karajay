@@ -217,6 +217,7 @@ class Enemy extends Objects {
 				setTimeout(() => {
 					delete Scenario.enemiesArray[hitkey];
 				}, 2000);
+				Engine.totalKills++;
 			}
 
 			if(Scenario.enemiesArray[hitkey])

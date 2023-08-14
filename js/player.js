@@ -131,8 +131,6 @@ class Player extends Objects {
 
 		this.moveCameraX();
 
-		this.setHealthBar();
-
 		//C.fillStyle = 'rgba(123,123,123,0.4)';
 		//C.fillRect(
 		//	this.pos.x + ((this.faceTo == 'left') ? -797 : 50),
@@ -140,22 +138,6 @@ class Player extends Objects {
 		//	800,
 		//	5
 		//)
-	}
-
-
-	setHealthBar(currentHealth) {
-
-		let totalHealthBar = 200;
-
-		let x = this.currentHealth * totalHealthBar / this.totalHealth;
-
-		if(x < 0) x = 0;
-
-		C.fillStyle = 'gray';
-		C.fillRect(28, 28, totalHealthBar+4, 24);
-
-		C.fillStyle = 'yellow';
-		C.fillRect(30, 30, x, 20);
 	}
 
 

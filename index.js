@@ -34,7 +34,8 @@ Scenario.createRandomPath();
 Engine.load([
 	Background,
 	Scenario,
-	Engine.hero
+	Engine.hero,
+	Hud
 ])
 
 Engine.run();
