@@ -3,6 +3,7 @@ const Scenario = {
 	pathArray: [],
 	platformArray: [],
 	enemiesArray: [],
+	othersArray: [],
 
 	referenceBlock:  {},
 
@@ -143,6 +144,10 @@ const Scenario = {
 			Scenario.enemiesArray[k].pos.x -= player.velocity.x;
 		}
 
+		for(k in Scenario.othersArray) {
+			Scenario.othersArray[k].pos.x -= player.velocity.x;
+		}
+
 		Scenario.referenceBlock.pos.x = last.pos.x;
 		Scenario.referenceBlock.pos.y = last.pos.y;
 
@@ -166,6 +171,10 @@ const Scenario = {
 
 		for(k in Scenario.enemiesArray) {
 			Scenario.enemiesArray[k].pos.y -= vel;
+		}
+
+		for(k in Scenario.othersArray) {
+			Scenario.othersArray[k].pos.y -= vel;
 		}
 	},
 
@@ -197,6 +206,10 @@ const Scenario = {
 		});
 
 		Scenario.enemiesArray.forEach(function(item){
+			item.update();
+		});
+
+		Scenario.othersArray.forEach(function(item){
 			item.update();
 		});
 

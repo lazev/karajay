@@ -32,6 +32,9 @@ class Player extends Objects {
 		this.hitCooldown = false;
 		this.hitCooldownTimer = 1000;
 
+		this.weapon3Cooldown = false;
+		this.weapon3CooldownTimer = 0;
+
 		this.hitCooldownCounterAnimation = 0;
 
 		this.totalHealth = 150;
@@ -116,6 +119,15 @@ class Player extends Objects {
 			}, 150);
 		}
 
+		if(Keys.pressed[Keys.map.attack3]) {
+			Keys.pressed[Keys.map.attack3] = false;
+			if(this.attacking) return;
+			this.attack3(true);
+			this.timerAttack = setTimeout(() => {
+				this.attack3(false);
+			}, 150);
+		}
+
 		if(this.attacking) {
 			this.haveState = true;
 			this.setAttack(this.attacking);
@@ -151,6 +163,11 @@ class Player extends Objects {
 	}
 
 
+	attack3(bool) {
+		this.attacking = (bool) ? 3 : 0;
+	}
+
+
 	setAttack(attackId) {
 
 		this.changeState('attack'+ attackId, this.faceTo);
@@ -165,8 +182,18 @@ class Player extends Objects {
 		else if(attackId == 2) {
 			weapon = new Pistol;
 		}
+		else if(attackId == 3) {
+			if(!this.weapon3Cooldown) {
+				this.weapon3Cooldown = true;
+				weapon = new Grenade;
 
-		weapon.attack();
+				this.weapon3CooldownTimer = setTimeout(()=> {
+					this.weapon3Cooldown = false;
+				}, weapon.cooldown ?? 150);
+			}
+		}
+
+		if(weapon) weapon.attack();
 	}
 
 

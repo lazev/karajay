@@ -10,6 +10,7 @@ const Keys = {
 		jump:    ' ',
 		attack1: 'j',
 		attack2: 'k',
+		attack3: 'l',
 		dash:    'shift',
 		pause:   'p'
 	},
