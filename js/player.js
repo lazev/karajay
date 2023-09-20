@@ -180,7 +180,7 @@ class Player extends Objects {
 			weapon = new GreyBlade;
 		}
 		else if(attackId == 2) {
-			weapon = new Pistol;
+			weapon = new Shotgun;
 		}
 		else if(attackId == 3) {
 			if(!this.weapon3Cooldown) {

@@ -1,8 +1,8 @@
-class Pistol {
+class Shotgun {
 
 	constructor() {
 
-		this.hitDamage = 32;
+		this.hitDamage = 52;
 
 		this.multipleHit = false;
 

@@ -106,6 +106,7 @@ class Grenade {
 			x: 0,
 			y: 0
 		};
+		Sounds.play('bombExp');
 		setTimeout(() => {
 			delete Scenario.othersArray[key];
 		}, 150);
