@@ -4,8 +4,9 @@ const Sounds = {
 		running: new Audio('sounds/running.mp3'),
 		jumping: new Audio('sounds/jumping.wav'),
 		hitting: new Audio('sounds/hitting.wav'),
-		gethit:  new Audio('sounds/gethit.mp3'),
-		bombExp: new Audio('sounds/grenade.wav')
+		gethit:  new Audio('sounds/gethit.mp3') ,
+		bombExp: new Audio('sounds/grenade.wav'),
+		shotgun: new Audio('sounds/shotgun.mp3')
 	},
 
 
@@ -27,8 +28,9 @@ const Sounds = {
 
 
 	play: id => {
-		if(typeof Sounds.map[id] != 'undefined')
+		if(typeof Sounds.map[id] != 'undefined' && Sounds.map[id].paused) {
 			Sounds.map[id].play();
+		}
 	}
 
 };

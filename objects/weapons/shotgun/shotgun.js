@@ -24,6 +24,8 @@ class Shotgun {
 			pos: this.getHitBox()
 		};
 
+		Sounds.play('shotgun');
+
 		let hitArrKey = Collisions.checkHitEnemy(attackHitBox, true);
 
 		let nearestEnemy = 0;

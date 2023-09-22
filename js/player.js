@@ -281,7 +281,7 @@ class Player extends Objects {
 	stay() {
 		this.changeState('stay');
 		this.velocity.x = 0;
-		Sounds.pauseAll();
+		Sounds.pause('running');
 	}
 
 
