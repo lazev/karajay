@@ -9,7 +9,7 @@ const Engine = {
 	elapsedFrames: 0,
 
 	gameOver: false,
-	
+
 	totalKills: 0,
 
 	load: arr => {
@@ -55,7 +55,6 @@ const Engine = {
 	calcHitDamage: damageBase => {
 		let rand = Math.floor(Math.random()*40) - 30;
 		let retDamage = Math.floor(damageBase + damageBase * rand / 100);
-		console.log('Dano', damageBase, rand, retDamage);
 		return retDamage;
 	},
 
@@ -65,7 +64,7 @@ const Engine = {
 		C.font = "90px Comic Sans MS";
 		C.fillStyle = "red";
 		C.textAlign = "center";
-		C.fillText("Morreu", canvas.width/2, canvas.height/2);
+		C.fillText("Died", canvas.width/2, canvas.height/2);
 		Engine.gameOver = true;
 		Sounds.pauseAll();
 

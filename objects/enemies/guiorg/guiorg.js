@@ -1,5 +1,5 @@
 class Guiorg extends Enemy { //https://rvros.itch.io/
-	constructor({pos}) {
+	constructor({pos, maxLife}) {
 
 		pos.w = '50';
 		pos.h = '70';
@@ -122,7 +122,7 @@ class Guiorg extends Enemy { //https://rvros.itch.io/
 					]
 				}
 			}
-		}
+		};
 
 		sprite.image.right.src = 'objects/enemies/guiorg/mapRight.png';
 		sprite.image.left.src  = 'objects/enemies/guiorg/mapLeft.png';
@@ -133,7 +133,7 @@ class Guiorg extends Enemy { //https://rvros.itch.io/
 		this.delayToAttack = 800;
 		this.attackHitPower = 20;
 		this.frameToTrigerAttack = 5;
-		this.maxLife = 100;
+		this.maxLife = maxLife ?? 50;
 		this.life = this.maxLife;
 		this.speed = Engine.randomNumber(4, 7);
 	}

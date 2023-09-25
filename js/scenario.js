@@ -11,8 +11,8 @@ const Scenario = {
 
 	blocksUntilChangeY: 0,
 
-	defaultBlockWidth: 6,
-	defaultBlockHeight: 6,
+	defaultBlockWidth: 24,
+	defaultBlockHeight: 24,
 
 
 	setInitialBlock: () => {
@@ -183,24 +183,21 @@ const Scenario = {
 
 		Scenario.platformArray.forEach(function(item){
 			if(item.pos.x+item.pos.w > 0 && item.pos.x < canvas.width) {
-				let block = new Blocks({pos: item.pos});
+				let block = new Blocks({pos: item.pos, imgSrc: 'img/floorgrass.png'});
 				block.drawBack();
 			}
 		});
 
 		Scenario.platformArray.forEach(function(item){
 			if(item.pos.x+item.pos.w > 0 && item.pos.x < canvas.width) {
-				let block = new Blocks({pos: item.pos});
+				let block = new Blocks({pos: item.pos, imgSrc: 'img/floorgrass.png'});
 				block.drawFront();
 			}
 		});
 
 		Scenario.pathArray.forEach(function(item){
 			if(item.pos.x+item.pos.w > 0 && item.pos.x < canvas.width) {
-				let block = new Blocks({
-					pos: item.pos
-				});
-
+				let block = new Blocks({pos: item.pos, imgSrc: 'img/floorgrass.png'});
 				block.draw();
 			}
 		});

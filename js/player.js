@@ -116,7 +116,7 @@ class Player extends Objects {
 			this.attack2(true);
 			this.timerAttack = setTimeout(() => {
 				this.attack2(false);
-			}, 150);
+			}, 500);
 		}
 
 		if(Keys.pressed[Keys.map.attack3]) {
@@ -177,12 +177,15 @@ class Player extends Objects {
 		let weapon;
 
 		if(attackId == 1) {
+			//Melee
 			weapon = new GreyBlade;
 		}
 		else if(attackId == 2) {
+			//Long range weapon
 			weapon = new Shotgun;
 		}
 		else if(attackId == 3) {
+			//Throwing weapon
 			if(!this.weapon3Cooldown) {
 				this.weapon3Cooldown = true;
 				weapon = new Grenade;
@@ -193,7 +196,12 @@ class Player extends Objects {
 			}
 		}
 
-		if(weapon) weapon.attack();
+		if(weapon) {
+			weapon.preAttack();
+			if(this.currentFrame == weapon.frameToTrigerAttack) {
+				weapon.attack();
+			}
+		}
 	}
 
 

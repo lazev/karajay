@@ -39,3 +39,9 @@ Engine.load([
 ])
 
 Engine.run();
+
+
+console.warn('** CREDITS/THANKS TO **');
+console.warn('Hero: Rvros https://rvros.itch.io/animated-pixel-hero');
+console.warn('Monsters: Luiz Melo https://luizmelo.itch.io/monsters-creatures-fantasy')
+console.warn('Grass scenario: Szadi https://szadiart.itch.io/pixel-dark-forest');

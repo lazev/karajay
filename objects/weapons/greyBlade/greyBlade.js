@@ -6,6 +6,8 @@ class GreyBlade {
 
 		this.multipleHit = true;
 
+		this.frameToTrigerAttack = 1;
+
 	}
 
 
@@ -16,6 +18,11 @@ class GreyBlade {
 			w: Engine.hero.pos.w + 10,
 			h: Engine.hero.pos.h
 		};
+	}
+
+
+	preAttack() {
+
 	}
 
 

@@ -2,7 +2,7 @@ class Grenade {
 
 	constructor() {
 
-		this.hitDamage = 190;
+		this.hitDamage = 120;
 
 		this.multipleHit = true;
 
@@ -26,6 +26,8 @@ class Grenade {
 			h: 7,
 			w: 7
 		};
+
+		this.frameToTrigerAttack = 0;
 
 		this.explosionRadius = 150;
 		this.timeToExplode = 1000;
@@ -56,7 +58,7 @@ class Grenade {
 
 		} else {
 
-			const gradient = C.createRadialGradient(
+			let gradient = C.createRadialGradient(
 				this.pos.x, this.pos.y, this.explosionRadius-30,
 				this.pos.x, this.pos.y, this.explosionRadius+20
 			);
@@ -89,6 +91,11 @@ class Grenade {
 		this.checkBlockCollisionY();
 
 		this.checkExplosionHitSomeone();
+	}
+
+
+	preAttack() {
+
 	}
 
 

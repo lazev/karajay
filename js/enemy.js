@@ -20,7 +20,7 @@ class Enemy extends Objects {
 
 	update() {
 
-		if(this.state == 'attack' && this.currentFrame == 5) {
+		if(this.state == 'attack' && this.currentFrame == this.frameToTrigerAttack) {
 			if(this.checkDistanceToAttack()) {
 				this.hitHero();
 			}
@@ -208,6 +208,8 @@ class Enemy extends Objects {
 			}, this.hitCooldownTimer);
 
 			this.life -= Engine.calcHitDamage(damage);
+
+			Sounds.play('hitting');
 
 			if(this.life <= 0) {
 				this.dead = true;
