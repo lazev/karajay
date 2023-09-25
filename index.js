@@ -9,8 +9,8 @@ const scaledCanvas = {
 }
 
 const cameraEdges = {
-	right:  canvas.width  /5 * 3,
-	left:   canvas.width  /5 * 2,
+	right:  canvas.width  / 2,// /5 * 3,
+	left:   canvas.width  / 2,// /5 * 2,
 	top:    canvas.height /5 * 3,
 	bottom: canvas.height /5 * 4
 }
@@ -36,9 +36,11 @@ Engine.load([
 	Scenario,
 	Engine.hero,
 	Hud
-])
+]);
 
-Engine.run();
+InitScreen.init();
+
+//Engine.run();
 
 
 console.warn('** CREDITS/THANKS TO **');
