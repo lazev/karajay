@@ -3,10 +3,14 @@ const Engine = {
 	hero: null,
 
 	looper: null,
+
 	thingsToUpdate: [],
+
 	gravity: 0.9,
 
 	elapsedFrames: 0,
+
+	running: false,
 
 	gameOver: false,
 
@@ -19,6 +23,8 @@ const Engine = {
 
 	run: () => {
 
+		Engine.running = true;
+
 		if(Keys.pressed[Keys.map.pause]) {
 			Keys.pressed[Keys.map.pause] = false;
 
@@ -30,7 +36,7 @@ const Engine = {
 
 		} else {
 
-			if(!Engine.gameOver) {
+			if(Engine.running && !Engine.gameOver) {
 				window.requestAnimationFrame(Engine.run);
 				//Engine.looper = setTimeout(Engine.run, 150);
 

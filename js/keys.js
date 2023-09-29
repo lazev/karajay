@@ -23,6 +23,7 @@ const Keys = {
 		});
 
 		window.addEventListener('keyup', function(ev){
+			if(!Engine.running) Engine.run();
 			Keys.pressed[ev.key.toLowerCase()] = false;
 		});
 

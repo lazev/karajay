@@ -1,35 +1,59 @@
 const InitScreen = {
 
-	bgImage: new Image(),
-
-	imageSource: 'img/init.png',
-
-	pos: {
-		x: 0,
-		y: 0,
-		w: 0,
-		h: 0
+	init: () => {
+		InitScreen.initTextPressKey();
+		InitScreen.initBanner();
+		InitScreen.initLogo();
 	},
 
 
-	init: () => {
+	initTextPressKey: () => {
+		C.font = '36px serif';
+		C.fillStyle = 'grey';
+		C.fillText('Press any key to start', 40, 500);
+	},
 
-		InitScreen.bgImage.src = InitScreen.imageSource;
 
-		InitScreen.pos.w = canvas.width*4;
-		InitScreen.pos.h = canvas.height*2;
+	initLogo: () => {
+		let img = new Image();
+		img.src = 'img/initLogo.gif';
+		img.onload = () => {
+			C.drawImage(img, 30, 40, img.width, img.height);
+		}
+	},
 
-		C.drawImage(
-			InitScreen.bgImage,
-			0,
-			0,
-			1024,
-			1024,
-			InitScreen.pos.x,
-			InitScreen.pos.y,
-			InitScreen.pos.w,
-			InitScreen.pos.h
-		);
+
+	initBanner: () => {
+		let img = new Image();
+		img.src = 'img/initBanner.png';
+		img.onload = () => {
+
+			let testaw  = canvas.width  / img.width;
+			let testah  = canvas.height / img.height;
+			let imgbase = (testaw < testah) ? 'width' : 'height';
+			let newX, newY, newW, newH;
+
+			if(imgbase == 'width') {
+				newW = canvas.width;
+				newH = img.height*canvas.width/img.width;
+				newX = 0;
+				newY = canvas.height - newH;
+			} else {
+				newH = canvas.height;
+				newW = img.width*canvas.height/img.height;
+				newX = canvas.width - newW;
+				newY = 0;
+			}
+
+			C.drawImage(img, newX, newY, newW, newH);
+
+			return {
+				x: newX,
+				y: newY,
+				w: newW,
+				h: newH
+			};
+		}
 	}
 
 };

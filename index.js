@@ -19,28 +19,31 @@ const possibleEnemies = [
 	Guiorg
 ];
 
-Background.init();
-Sounds.init();
 
-Keys.monitor();
+document.addEventListener('DOMContentLoaded', function() {
+	Background.init();
+	Sounds.init();
 
-Engine.hero = new Player;
+	Keys.monitor();
 
-//const enemy1 = new Enemy;
+	Engine.hero = new Player;
 
-Scenario.setInitialBlock();
-Scenario.createRandomPath();
+	//const enemy1 = new Enemy;
 
-Engine.load([
-	Background,
-	Scenario,
-	Engine.hero,
-	Hud
-]);
+	Scenario.setInitialBlock();
+	Scenario.createRandomPath();
 
-InitScreen.init();
+	Engine.load([
+		Background,
+		Scenario,
+		Engine.hero,
+		Hud
+	]);
 
-//Engine.run();
+	InitScreen.init();
+
+	//Engine.run();
+}, false);
 
 
 console.warn('** CREDITS/THANKS TO **');
