@@ -16,7 +16,7 @@ const InitScreen = {
 
 	initLogo: () => {
 		let img = new Image();
-		img.src = 'img/initLogo.gif';
+		img.src = 'img/initLogo.png';
 		img.onload = () => {
 			C.drawImage(img, 30, 40, img.width, img.height);
 		}

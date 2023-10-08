@@ -11,7 +11,7 @@ const Scenario = {
 
 	blocksUntilChangeY: 0,
 
-	defaultBlockWidth: 24,
+	defaultBlockWidth: 50,
 	defaultBlockHeight: 24,
 
 
@@ -35,11 +35,11 @@ const Scenario = {
 			block = Scenario.createNextBlock();
 			Scenario.pathArray.push(block);
 
-			if(Scenario.pathArray.length > 150) {
+			if(Scenario.pathArray.length > 5) {
 
 				let rand = Engine.randomNumber(0, 100);
 
-				if(rand > 98) {
+				if(rand > 90) {
 
 					rand = Engine.randomNumber(0, possibleEnemies.length-1);
 
@@ -98,25 +98,31 @@ const Scenario = {
 
 			let rand = Math.random()*100;
 
-			if(rand >= 95) {
+			if(rand >= 75) {
 				Scenario.createRandomPlatforms();
 			}
 
-			if(rand >= 98) {
+			if(rand >= 85) {
 				block.pos.y -= Scenario.blockPlatformHeight;
 				block.pos.h += Scenario.blockPlatformHeight;
 				Scenario.referenceBlock.pos.y = block.pos.y;
 				Scenario.referenceBlock.pos.h = block.pos.h;
-				Scenario.blocksUntilChangeY = 50;
+				Scenario.blocksUntilChangeY = 5;
+				block.pos.w = 25;
+				Scenario.referenceBlock.pos.w = 25;
+				block.imgSrc = 'img/floorgrassup.png';
 			}
 
-			else if(rand >= 96) {
+			else if(rand >= 70) {
 				block.pos.h += Scenario.blockPlatformHeight;
 				Scenario.referenceBlock.pos.y += Scenario.blockPlatformHeight;
-				Scenario.blocksUntilChangeY = 50;
+				Scenario.blocksUntilChangeY = 5;
+				block.pos.w = 25;
+				Scenario.referenceBlock.pos.w = 25;
+				block.imgSrc = 'img/floorgrassdown.png';
 			}
 
-			else if(rand >= 90){
+			else if(rand >= 10){
 				block.pos.w = 260;
 				Scenario.referenceBlock.pos.w = 260;
 			}
@@ -130,6 +136,8 @@ const Scenario = {
 
 	moveScenarioX: player => {
 		let last;
+
+		Engine.pet.pos.x -= player.velocity.x;
 
 		for(let k in Scenario.pathArray) {
 			Scenario.pathArray[k].pos.x -= player.velocity.x;
@@ -161,6 +169,8 @@ const Scenario = {
 
 		let vel = (player.velocity.y < 0) ? -10 : 10;
 
+		Engine.pet.pos.y -= vel;
+
 		for(let k in Scenario.pathArray) {
 			Scenario.pathArray[k].pos.y -= vel;
 		}
@@ -183,21 +193,24 @@ const Scenario = {
 
 		Scenario.platformArray.forEach(function(item){
 			if(item.pos.x+item.pos.w > 0 && item.pos.x < canvas.width) {
-				let block = new Blocks({pos: item.pos, imgSrc: 'img/floorgrass.png'});
+				let img = (item.imgSrc) ? item.imgSrc : 'img/floorgrass.png';
+				let block = new Blocks({pos: item.pos, imgSrc: img});
 				block.drawBack();
 			}
 		});
 
 		Scenario.platformArray.forEach(function(item){
 			if(item.pos.x+item.pos.w > 0 && item.pos.x < canvas.width) {
-				let block = new Blocks({pos: item.pos, imgSrc: 'img/floorgrass.png'});
+				let img = (item.imgSrc) ? item.imgSrc : 'img/floorgrass.png';
+				let block = new Blocks({pos: item.pos, imgSrc: img});
 				block.drawFront();
 			}
 		});
 
 		Scenario.pathArray.forEach(function(item){
 			if(item.pos.x+item.pos.w > 0 && item.pos.x < canvas.width) {
-				let block = new Blocks({pos: item.pos, imgSrc: 'img/floorgrass.png'});
+				let img = (item.imgSrc) ? item.imgSrc : 'img/floorgrass.png';
+				let block = new Blocks({pos: item.pos, imgSrc: img});
 				block.draw();
 			}
 		});
@@ -210,6 +223,18 @@ const Scenario = {
 			item.update();
 		});
 
+	},
+
+
+	createLifePotion: pos => {
+
+		let lfpt = new LifePotion({
+			pos: pos
+		});
+
+		let key = Scenario.othersArray.push(lfpt) - 1;
+
+		Scenario.othersArray[key].arrayKey = key;
 	},
 
 

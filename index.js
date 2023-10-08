@@ -27,8 +27,7 @@ document.addEventListener('DOMContentLoaded', function() {
 	Keys.monitor();
 
 	Engine.hero = new Player;
-
-	//const enemy1 = new Enemy;
+	Engine.pet  = new KarAMelo;
 
 	Scenario.setInitialBlock();
 	Scenario.createRandomPath();
@@ -36,11 +35,18 @@ document.addEventListener('DOMContentLoaded', function() {
 	Engine.load([
 		Background,
 		Scenario,
+		Engine.pet,
 		Engine.hero,
 		Hud
 	]);
 
 	InitScreen.init();
+
+	Engine.counterPlayTime = setInterval(() => {
+		if(Engine.running) {
+			Engine.playTime++;
+		}
+	}, 1000);
 
 	//Engine.run();
 }, false);

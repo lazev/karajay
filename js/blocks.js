@@ -26,10 +26,6 @@ class Blocks {
 	drawFront() {
 		C.drawImage(
 			this.imageElem,
-			0,
-			0,
-			128,
-			24,
 			this.pos.x,
 			this.pos.y-10,
 			this.pos.w,

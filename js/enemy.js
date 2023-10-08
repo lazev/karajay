@@ -220,6 +220,9 @@ class Enemy extends Objects {
 					delete Scenario.enemiesArray[hitkey];
 				}, 2000);
 				Engine.totalKills++;
+				if(Engine.randomNumber(0, 100) > 95) {
+					Scenario.createLifePotion(this.pos);
+				}
 			}
 
 			if(Scenario.enemiesArray[hitkey])

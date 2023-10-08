@@ -16,6 +16,9 @@ const Engine = {
 
 	totalKills: 0,
 
+	playTime: 0,
+	counterPlayTime: null,
+
 	load: arr => {
 		Engine.thingsToUpdate = arr;
 	},

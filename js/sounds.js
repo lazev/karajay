@@ -6,7 +6,8 @@ const Sounds = {
 		hitting: new Audio('sounds/hitting.wav'),
 		gethit:  new Audio('sounds/gethit.mp3') ,
 		bombExp: new Audio('sounds/grenade.wav'),
-		shotgun: new Audio('sounds/shotgun.mp3')
+		shotgun: new Audio('sounds/shotgun.mp3'),
+		potion:  new Audio('sounds/potion.mp3')
 	},
 
 
