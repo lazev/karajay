@@ -148,7 +148,6 @@ class KarAMelo extends Objects { //https://free-game-assets.itch.io/free-street-
 		let block = Collisions.checkScenario(area);
 		if(block !== false) {
 			if(this.state == 'run') {
-				console.log('jump');
 				this.jump();
 			}
 		}

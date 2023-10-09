@@ -36,8 +36,8 @@ class Shotgun {
 		};
 
 		//Projectile path
-		C.fillStyle = 'rgba(123,123,123,0.4)';
-		C.fillRect(hitBox.x, hitBox.y, hitBox.w, hitBox.h);
+		//C.fillStyle = 'rgba(123,123,123,0.4)';
+		//C.fillRect(hitBox.x, hitBox.y, hitBox.w, hitBox.h);
 
 		let gradient = C.createRadialGradient(
 			hitBox.firePos, hitBox.y, 3,

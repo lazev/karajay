@@ -6,6 +6,8 @@ const Engine = {
 
 	thingsToUpdate: [],
 
+	daylight: 100,
+
 	gravity: 0.9,
 
 	elapsedFrames: 0,

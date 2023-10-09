@@ -52,7 +52,6 @@ const Scenario = {
 				}
 			}
 
-
 		} while(block.pos.x < canvas.width+200);
 
 	},

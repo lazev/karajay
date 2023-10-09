@@ -154,12 +154,15 @@ class Objects {
 
 		this.stay();
 
-		if(this.faceTo == 'right') {
-			this.pos.x = block.pos.x - this.pos.w - 0.01;
-		}
+		if(block.pos.w < 50) { //Gambiarra to fix crouch bug
 
-		if(this.faceTo == 'left') {
-			this.pos.x = block.pos.x + block.pos.w + 0.01;
+			if(this.faceTo == 'right') {
+				this.pos.x = block.pos.x - this.pos.w - 0.01;
+			}
+
+			if(this.faceTo == 'left') {
+				this.pos.x = block.pos.x + block.pos.w + 0.01;
+			}
 		}
 	}
 

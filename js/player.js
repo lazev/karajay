@@ -337,9 +337,9 @@ class Player extends Objects {
 	}
 
 
-   jumping() {
-      this.changeState('jump', this.faceTo);
-   }
+	jumping() {
+		this.changeState('jump', this.faceTo);
+	}
 
 
 	falling() {

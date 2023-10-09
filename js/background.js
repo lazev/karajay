@@ -56,6 +56,22 @@ const Background = {
 
 
 	update: () => {
-		Background.draw();
+
+		let totalW  = Background.pos.w;
+
+		let current = canvas.width-Background.pos.x;
+
+		let perc = current*100/totalW;
+
+		Engine.daylight = 100-perc;
+
+		if(Engine.daylight < 100) {
+			C.globalAlpha = Engine.daylight/100;
+			Background.draw();
+			C.globalAlpha = 1;
+		} else {
+			Background.draw();
+		}
+
 	}
 };

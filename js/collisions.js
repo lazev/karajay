@@ -20,9 +20,11 @@ const Collisions = {
 		let arrRet = [];
 		if(Scenario.enemiesArray.length) {
 			for(let k in Scenario.enemiesArray) {
-				if(Collisions.checkFull(obj1, Scenario.enemiesArray[k])) {
-					arrRet.push(k);
-					if(!multiple) return arrRet;
+				if(Scenario.enemiesArray[k].dead == false) {
+					if(Collisions.checkFull(obj1, Scenario.enemiesArray[k])) {
+						arrRet.push(k);
+						if(!multiple) return arrRet;
+					}
 				}
 			}
 		}
