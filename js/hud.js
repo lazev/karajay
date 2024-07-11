@@ -5,7 +5,8 @@ const Hud = {
 		Hud.updateKillCounter();
 		Hud.setHealthBar();
 		Hud.updateClock();
-
+		Hud.updateAmmo();
+		Hud.updateBomb();
 	},
 
 
@@ -34,6 +35,24 @@ const Hud = {
 	},
 
 
+	updateAmmo: () => {
+
+		C.font = "20px Comic Sans MS";
+		C.fillStyle = "yellow";
+		C.textAlign = "center";
+		C.fillText(" "+ Engine.hero.weapons[2].ammo, 500, 40);
+	},
+
+
+	updateBomb: () => {
+
+		C.font = "20px Comic Sans MS";
+		C.fillStyle = "darkgreen";
+		C.textAlign = "center";
+		C.fillText(" "+ Engine.hero.weapons[3].numberOfUnits, 550, 40);
+	},
+
+
 	updateClock: () => {
 		let time = Engine.playTime;
 		let hour = parseInt(time/3600);
@@ -50,7 +69,7 @@ const Hud = {
 		if(sec < 10) sec = '0'+ sec;
 
 		C.font = "20px Comic Sans MS";
-		C.fillStyle = "yellow";
+		C.fillStyle = "white";
 		C.textAlign = "center";
 		C.fillText(hour + min +':'+ sec, 900, 40);
 

@@ -8,6 +8,10 @@ class Shotgun {
 
 		this.frameToTrigerAttack = 6;
 
+		this.ammo = 12;
+
+		this.cooldown = false;
+		this.cooldownTime = 500;
 	}
 
 
@@ -23,7 +27,14 @@ class Shotgun {
 
 
 	preAttack() {
+
+		if(this.cooldown) return false;
+
+		if(this.ammo <= 0) return false;
+
 		Sounds.play('shotgun');
+
+		return true;
 	}
 
 
@@ -34,6 +45,11 @@ class Shotgun {
 		let attackHitBox = {
 			pos: hitBox
 		};
+
+		this.cooldown = true;
+		setTimeout(()=>{ this.cooldown = false; }, this.cooldownTime);
+
+		this.ammo--;
 
 		//Projectile path
 		//C.fillStyle = 'rgba(123,123,123,0.4)';

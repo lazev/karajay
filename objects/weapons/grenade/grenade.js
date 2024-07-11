@@ -6,19 +6,37 @@ class Grenade {
 
 		this.multipleHit = true;
 
-		this.cooldown = 2000;
+		this.explosionRadius = 150;
 
-		let posAndDir = this.getThrownPosAndDir();
+		this.timeToExplode = 1000;
+
+		this.velocity = { x: 10, y: 10 };
+
+		this.exploding = false;
+
+		this.frameToTrigerAttack = 0;
+
+		this.numberOfUnits = 3;
+
+		this.cooldownTime = 2000;
+		this.cooldown     = false;
+	}
+
+
+	preAttack() {
+
+		if(this.cooldown) return false;
+
+		if(this.numberOfUnits <= 0) return false;
+
+		this.cooldown = true;
+		setTimeout(()=>{ this.cooldown = false; }, this.cooldownTime);
+
+		this.numberOfUnits--;
+
+		let posAndDir = this.getThrownPosAndDirection();
 
 		this.direction = posAndDir.dir;
-
-		this.velocity = {
-			x: 10,
-			y: -10
-		};
-
-		if(this.direction == 'left')
-			this.velocity.x = -this.velocity.x;
 
 		this.pos = {
 			x: posAndDir.x,
@@ -27,17 +45,17 @@ class Grenade {
 			w: 7
 		};
 
-		this.frameToTrigerAttack = 0;
 
-		this.explosionRadius = 150;
-		this.timeToExplode = 1000;
+		this.velocity.y = -10;
+		this.velocity.x = (this.direction == 'left') ? -10 : 10;
+
 		this.exploding = false;
 
-		this.draw();
+		return true;
 	}
 
 
-	getThrownPosAndDir() {
+	getThrownPosAndDirection() {
 		return {
 			x:   Engine.hero.pos.x + ((Engine.hero.faceTo == 'left') ? 0 : 50),
 			y:   Engine.hero.pos.y + 25,
@@ -46,33 +64,11 @@ class Grenade {
 	}
 
 
-	draw() {
-
-		if(!this.exploding) {
-
-			C.beginPath();
-			C.arc(this.pos.x, this.pos.y, 7, 0, 2 * Math.PI);
-			C.stroke();
-			C.fillStyle = "darkgreen";
-			C.fill();
-
-		} else {
-
-			let gradient = C.createRadialGradient(
-				this.pos.x, this.pos.y, this.explosionRadius-30,
-				this.pos.x, this.pos.y, this.explosionRadius+20
-			);
-
-			// Add three color stops
-			gradient.addColorStop(0, "white");
-			gradient.addColorStop(1, "orange");
-
-			C.beginPath();
-			C.arc(this.pos.x, this.pos.y, this.explosionRadius, 0, 2 * Math.PI);
-			C.fillStyle = gradient;
-			C.fill();
-		}
-
+	attack() {
+		let key = Scenario.othersArray.push(this) - 1;
+		setTimeout(() => {
+			this.explode(key);
+		}, this.timeToExplode);
 	}
 
 
@@ -94,16 +90,31 @@ class Grenade {
 	}
 
 
-	preAttack() {
+	draw() {
 
-	}
+		if(!this.exploding) {
 
+			C.beginPath();
+			C.arc(this.pos.x, this.pos.y, 7, 0, 2 * Math.PI);
+			C.stroke();
+			C.fillStyle = "darkgreen";
+			C.fill();
 
-	attack() {
-		let key = Scenario.othersArray.push(this) - 1;
-		setTimeout(() => {
-			this.explode(key);
-		}, this.timeToExplode);
+		} else {
+
+			let gradient = C.createRadialGradient(
+				this.pos.x, this.pos.y, this.explosionRadius-30,
+				this.pos.x, this.pos.y, this.explosionRadius+20
+			);
+
+			gradient.addColorStop(0, "white");
+			gradient.addColorStop(1, "orange");
+
+			C.beginPath();
+			C.arc(this.pos.x, this.pos.y, this.explosionRadius, 0, 2 * Math.PI);
+			C.fillStyle = gradient;
+			C.fill();
+		}
 	}
 
 
@@ -134,16 +145,6 @@ class Grenade {
 	}
 
 
-	getHitBox() {
-		return {
-			x: this.pos.x - this.explosionRadius,
-			y: this.pos.y - this.explosionRadius,
-			w: this.explosionRadius*2,
-			h: this.explosionRadius*2
-		};
-	}
-
-
 	checkExplosionHitSomeone() {
 		if(!this.exploding) return;
 
@@ -159,7 +160,16 @@ class Grenade {
 				Scenario.enemiesArray[hitkey].getHit(hitkey, this.hitDamage);
 			});
 		}
+	}
 
+
+	getHitBox() {
+		return {
+			x: this.pos.x - this.explosionRadius,
+			y: this.pos.y - this.explosionRadius,
+			w: this.explosionRadius*2,
+			h: this.explosionRadius*2
+		};
 	}
 
 
@@ -199,6 +209,5 @@ class Grenade {
 
 		this.velocity.x = this.velocity.x*-1;
 	}
-
 
 }

@@ -225,11 +225,13 @@ const Scenario = {
 	},
 
 
-	createLifePotion: pos => {
+	create: (item, pos) => {
 
-		let lfpt = new LifePotion({
-			pos: pos
-		});
+		let lfpt;
+
+		if(item == 'LifePotion') lfpt = new LifePotion({ pos: pos });
+		if(item == 'SgAmmo')     lfpt = new SgAmmo({ pos: pos });
+		if(item == 'Grenade')    lfpt = new Grenade({ pos: pos });
 
 		let key = Scenario.othersArray.push(lfpt) - 1;
 

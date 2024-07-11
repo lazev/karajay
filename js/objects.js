@@ -70,21 +70,46 @@ class Objects {
 
 
 	draw() {
+		let loop      = this.sprite.map[this.state].loop ?? true;
+		let buffer    = this.sprite.map[this.state].framesToChange;
 		let frames    = this.sprite.map[this.state][this.faceTo];
 		let imgToDraw = this.sprite.image[this.faceTo];
-		let buffer    = this.sprite.map[this.state].framesToChange;
 
 		if(Engine.elapsedFrames % buffer === 0) {
 			this.currentFrame++;
-			if(this.currentFrame >= frames.length) this.currentFrame = 0;
+			if(this.currentFrame >= frames.length) {
+				if(loop) {
+					this.currentFrame = 0;
+				} else {
+					this.currentFrame = null;
+					return;
+				}
+			}
 		}
 
-		let item = frames[this.currentFrame];
+		if(this.currentFrame !== null) {
 
-		this.hit = item.hit;
+			let item = frames[this.currentFrame];
 
-		this.pos.w = item.hit.w * this.scale;
-		this.pos.h = item.hit.h * this.scale;
+			this.hit = item.hit;
+
+			this.pos.w = item.hit.w * this.scale;
+			this.pos.h = item.hit.h * this.scale;
+
+			C.drawImage(
+				imgToDraw,
+
+				item.pos.x,
+				item.pos.y,
+				item.pos.w,
+				item.pos.h,
+
+				this.pos.x - item.hit.x * this.scale,
+				this.pos.y - item.hit.y * this.scale,
+				item.pos.w * this.scale,
+				item.pos.h * this.scale
+			);
+		}
 
 		//~ C.fillStyle = this.color;
 		//~ C.fillRect(this.pos.x, this.pos.y, this.pos.w, this.pos.h);
@@ -97,19 +122,6 @@ class Objects {
 				//~ item.pos.h * this.scale
 		//~ );
 
-		C.drawImage(
-			imgToDraw,
-
-			item.pos.x,
-			item.pos.y,
-			item.pos.w,
-			item.pos.h,
-
-			this.pos.x - item.hit.x * this.scale,
-			this.pos.y - item.hit.y * this.scale,
-			item.pos.w * this.scale,
-			item.pos.h * this.scale
-		);
 	}
 
 
@@ -140,13 +152,16 @@ class Objects {
 		//console.log(block.pos);
 
 		if(!this.lostScenarioFloor) {
-			if(typeof this.jumpReset == 'function')
-				this.jumpReset();
 
 			this.velocity.y = 0;
 
 			this.pos.y = block.pos.y - this.pos.h - 0.01;
+
+			if(typeof this.onTouchGround == 'function') {
+				this.onTouchGround();
+			}
 		}
+
 	}
 
 

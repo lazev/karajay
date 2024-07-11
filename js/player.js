@@ -1,7 +1,7 @@
 class Player extends Objects {
 	constructor() {
 		super({
-			sprite: new Adventurer15,
+			sprite: new Adventurer15(),
 
 			color: 'blue',
 
@@ -22,8 +22,10 @@ class Player extends Objects {
 
 		this.maxJumps      = 2;
 		this.jumpCountdown = 0;
+		this.onAir = false;
 
 		this.dashing = false;
+		this.diving  = false;
 
 		this.attacking = 0;
 
@@ -39,14 +41,18 @@ class Player extends Objects {
 
 		this.totalHealth = 150;
 		this.currentHealth = 150;
+
+		this.weapons = {
+			1: new GreyBlade(),
+			2: new Shotgun(),
+			3: new Grenade()
+		};
 	}
 
 
 	update() {
 
-		if(this.hitCooldown) {
-			C.globalAlpha = 0.5;
-		}
+		if(this.hitCooldown) C.globalAlpha = 0.5;
 
 		this.draw();
 
@@ -62,6 +68,9 @@ class Player extends Objects {
 			this.pos.y += 15;
 			this.haveState = true;
 			this.crouch();
+			if(this.onAir) {
+				this.diving = true;
+			}
 		}
 		else if(Keys.pressed[Keys.map.right]) {
 			if(!this.attacking) {
@@ -103,29 +112,17 @@ class Player extends Objects {
 
 		if(Keys.pressed[Keys.map.attack1]) {
 			Keys.pressed[Keys.map.attack1] = false;
-			if(this.attacking) return;
-			this.attack1(true);
-			this.timerAttack = setTimeout(() => {
-				this.attack1(false);
-			}, 150);
+			if(!this.attacking) this.attacking = 1;
 		}
 
 		if(Keys.pressed[Keys.map.attack2]) {
 			Keys.pressed[Keys.map.attack2] = false;
-			if(this.attacking) return;
-			this.attack2(true);
-			this.timerAttack = setTimeout(() => {
-				this.attack2(false);
-			}, 500);
+			if(!this.attacking) this.attacking = 2;
 		}
 
 		if(Keys.pressed[Keys.map.attack3]) {
 			Keys.pressed[Keys.map.attack3] = false;
-			if(this.attacking) return;
-			this.attack3(true);
-			this.timerAttack = setTimeout(() => {
-				this.attack3(false);
-			}, 150);
+			if(!this.attacking) this.attacking = 3;
 		}
 
 		if(this.attacking) {
@@ -139,9 +136,9 @@ class Player extends Objects {
 
 		if(!this.haveState) this.stay();
 
-		//this.checkGetHitOnTouch();
-
 		this.moveCameraX();
+
+		//this.checkGetHitOnTouch();
 
 		//C.fillStyle = 'rgba(123,123,123,0.4)';
 		//C.fillRect(
@@ -153,54 +150,25 @@ class Player extends Objects {
 	}
 
 
-	attack1(bool) {
-		this.attacking = (bool) ? 1 : 0;
-	}
-
-
-	attack2(bool) {
-		this.attacking = (bool) ? 2 : 0;
-	}
-
-
-	attack3(bool) {
-		this.attacking = (bool) ? 3 : 0;
-	}
-
-
 	setAttack(attackId) {
 
-		this.changeState('attack'+ attackId, this.faceTo);
-		this.velocity.x = 0;
-		this.velocity.y = this.velocity.y / 5;
+		let weapon = this.weapons[attackId];
 
-		let weapon;
+		if(weapon.preAttack()) {
+			this.changeState('attack'+ attackId, this.faceTo);
+			this.velocity.x = 0;
+			this.velocity.y = this.velocity.y / 5;
 
-		if(attackId == 1) {
-			//Melee
-			weapon = new GreyBlade;
-		}
-		else if(attackId == 2) {
-			//Long range weapon
-			weapon = new Shotgun;
-		}
-		else if(attackId == 3) {
-			//Throwing weapon
-			if(!this.weapon3Cooldown) {
-				this.weapon3Cooldown = true;
-				weapon = new Grenade;
-
-				this.weapon3CooldownTimer = setTimeout(()=> {
-					this.weapon3Cooldown = false;
-				}, weapon.cooldown ?? 150);
-			}
-		}
-
-		if(weapon) {
-			weapon.preAttack();
 			if(this.currentFrame == weapon.frameToTrigerAttack) {
 				weapon.attack();
 			}
+		} else {
+			this.attacking = 0;
+		}
+
+		if(this.currentFrame === null) {
+			console.log('fim de frame');
+			this.attacking = 0;
 		}
 	}
 
@@ -211,7 +179,7 @@ class Player extends Objects {
 			if(!this.hitCooldown) {
 				this.hitCooldown = true;
 				this.getHit(Scenario.enemiesArray[k]);
-				setTimeout(()=> { this.hitCooldown = false }, this.hitCooldownTimer);
+				setTimeout(()=> { this.hitCooldown = false; }, this.hitCooldownTimer);
 			}
 		}
 	}
@@ -221,7 +189,7 @@ class Player extends Objects {
 		if(!this.hitCooldown) {
 			this.hitCooldown = true;
 			this.getHit(enemy);
-			setTimeout(()=> { this.hitCooldown = false }, this.hitCooldownTimer);
+			setTimeout(()=> { this.hitCooldown = false; }, this.hitCooldownTimer);
 		}
 	}
 
@@ -338,6 +306,7 @@ class Player extends Objects {
 
 
 	jumping() {
+		this.onAir = true;
 		this.changeState('jump', this.faceTo);
 	}
 
@@ -346,4 +315,20 @@ class Player extends Objects {
 		this.changeState('fall', this.faceTo);
 	}
 
+	onTouchGround() {
+		this.onAir = false;
+
+		this.jumpReset();
+
+		if(this.diving) {
+			this.diveExplode();
+		}
+	}
+
+
+	diveExplode() {
+		this.diving = false;
+		console.log('Dive explode', this.pos);
+
+	}
 }

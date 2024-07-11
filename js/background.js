@@ -63,7 +63,7 @@ const Background = {
 
 		let perc = current*100/totalW;
 
-		Engine.daylight = 100-perc;
+		Engine.daylight = Math.abs(100-perc);
 
 		if(Engine.daylight < 100) {
 			C.globalAlpha = Engine.daylight/100;

@@ -8,6 +8,8 @@ class GreyBlade {
 
 		this.frameToTrigerAttack = 1;
 
+		this.cooldown = false;
+		this.cooldownTime = 300;
 	}
 
 
@@ -23,6 +25,9 @@ class GreyBlade {
 
 	preAttack() {
 
+		if(this.cooldown) return false;
+
+		return true;
 	}
 
 
@@ -30,6 +35,9 @@ class GreyBlade {
 		let attackHitBox = {
 			pos: this.getHitBox()
 		};
+
+		this.cooldown = true;
+		setTimeout(()=>{ this.cooldown = false; }, this.cooldownTime);
 
 		let hitArrKey = Collisions.checkHitEnemy(attackHitBox, this.multipleHit);
 

@@ -1,4 +1,4 @@
-class KarAMelo extends Objects { //https://free-game-assets.itch.io/free-street-animal-pixel-art-asset-pack
+class KarAMelo extends Objects {
 	constructor() {
 
 		let sprite = {
@@ -77,7 +77,7 @@ class KarAMelo extends Objects { //https://free-game-assets.itch.io/free-street-
 
 		this.arrayKey = 0;
 
-		this.speed = 9;
+		this.speed = 10;
 
 		this.jumping = false;
 	}

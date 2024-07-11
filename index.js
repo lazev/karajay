@@ -53,6 +53,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 console.warn('** CREDITS/THANKS TO **');
-console.warn('Hero: Rvros https://rvros.itch.io/animated-pixel-hero');
-console.warn('Monsters: Luiz Melo https://luizmelo.itch.io/monsters-creatures-fantasy')
-console.warn('Grass scenario: Szadi https://szadiart.itch.io/pixel-dark-forest');
+console.warn('Hero: https://rvros.itch.io/animated-pixel-hero');
+console.warn('KarAMelo: https://free-game-assets.itch.io/free-street-animal-pixel-art-asset-pack');
+console.warn('Monsters: https://luizmelo.itch.io/monsters-creatures-fantasy')
+console.warn('Grass: https://szadiart.itch.io/pixel-dark-forest');
+console.warn('Ammo: https://fightswithbears.itch.io/2d-health-and-ammo-pickups');
+console.warn('Potion: https://cup-coffee.itch.io/pixel-assets');

@@ -1,4 +1,4 @@
-class Guiorg extends Enemy { //https://rvros.itch.io/
+class Guiorg extends Enemy {
 	constructor({pos, maxLife}) {
 
 		pos.w = '50';

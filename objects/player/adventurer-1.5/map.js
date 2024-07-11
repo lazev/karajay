@@ -84,20 +84,24 @@ class Adventurer15 { //https://rvros.itch.io/
 			},
 
 			attack1: {
+				loop: false,
 				framesToChange: 4,
 				right: [
 					{ "pos": { "x": 250, "y": 481, "w": 50, "h": 37 }, "hit": { "x": 17, "y": 11, "w": 18, "h": 27 } },
+					{ "pos": { "x": 300, "y": 481, "w": 50, "h": 37 }, "hit": { "x": 17, "y": 11, "w": 18, "h": 27 } },
 					{ "pos": { "x": 300, "y": 481, "w": 50, "h": 37 }, "hit": { "x": 17, "y": 11, "w": 18, "h": 27 } },
 					{ "pos": { "x": 0,   "y": 518, "w": 50, "h": 37 }, "hit": { "x": 17, "y": 11, "w": 18, "h": 27 } }
 				],
 				left: [
 					{ "pos": { "x": 250, "y": 481, "w": 50, "h": 37 }, "hit": { "x": 15, "y": 11, "w": 18, "h": 27 } },
 					{ "pos": { "x": 300, "y": 481, "w": 50, "h": 37 }, "hit": { "x": 15, "y": 11, "w": 18, "h": 27 } },
+					{ "pos": { "x": 300, "y": 481, "w": 50, "h": 37 }, "hit": { "x": 15, "y": 11, "w": 18, "h": 27 } },
 					{ "pos": { "x": 0,   "y": 518, "w": 50, "h": 37 }, "hit": { "x": 15, "y": 11, "w": 18, "h": 27 } }
 				]
 			},
 
 			attack2: {
+				loop: false,
 				framesToChange: 4,
 				right: [
 					{ "pos": { "x": 100,  "y": 333, "w": 50, "h": 37 }, "hit": { "x": 17, "y": 9, "w": 18, "h": 27 } },
@@ -128,6 +132,7 @@ class Adventurer15 { //https://rvros.itch.io/
 			},
 
 			attack3: {
+				loop: false,
 				framesToChange: 4,
 				right: [
 					{ "pos": { "x": 50,  "y": 444, "w": 50, "h": 37 }, "hit": { "x": 17, "y": 9, "w": 18, "h": 27 } },

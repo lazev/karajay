@@ -4,7 +4,7 @@ class Enemy extends Objects {
 
 		this.hitCooldown = false;
 
-		this.hitCooldownTimer = 400;
+		this.hitCooldownTimer = 300;
 
 		this.color  = 'red';
 
@@ -220,8 +220,12 @@ class Enemy extends Objects {
 					delete Scenario.enemiesArray[hitkey];
 				}, 2000);
 				Engine.totalKills++;
+
 				if(Engine.randomNumber(0, 100) > 95) {
-					Scenario.createLifePotion(this.pos);
+					Scenario.create('LifePotion', this.pos);
+				}
+				else if(Engine.randomNumber(0, 100) > 90) {
+					Scenario.create('SgAmmo', this.pos);
 				}
 			}
 
